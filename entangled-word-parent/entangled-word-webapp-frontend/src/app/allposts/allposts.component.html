@@ -1,0 +1,6 @@
+<h1>All posts (blocking on server side)</h1>
+<ul>
+  <li *ngFor = "let post of allposts | async">
+    <app-post [post]="post" [master]="master"></app-post>
+  </li>
+</ul>

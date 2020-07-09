@@ -1,0 +1,6 @@
+<h1>My Feed</h1>
+<ul>
+  <li *ngFor = "let post of feed">
+    <app-post [post]="post" [master]="master"></app-post>
+  </li>
+</ul>

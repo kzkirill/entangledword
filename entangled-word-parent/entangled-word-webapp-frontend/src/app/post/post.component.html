@@ -1,0 +1,6 @@
+<div>Author: </div>
+<input #postauthor (keyup)="onAuthorKey(postauthor.value)" value="{{post.author}}" />
+<div>Text: </div>
+<input #posttext (keyup)="onTextkey(posttext.value)" value="{{post.text}}" />
+<br>
+<button (click)="onSaveClick()">Save</button>
