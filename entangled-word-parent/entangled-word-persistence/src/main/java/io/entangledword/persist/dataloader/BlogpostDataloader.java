@@ -30,7 +30,7 @@ public class BlogpostDataloader implements ApplicationRunner {
 		logger.info("{} is running.", this.getClass().getName());
 
 		if (repoCount() == 0) {
-			IntStream.range(0, 50).forEach(index -> {
+			IntStream.range(0, 5).forEach(index -> {
 				logger.info("Creating from index {}", index);
 				repo.save(instanceFromIndex(index)).block();
 			});

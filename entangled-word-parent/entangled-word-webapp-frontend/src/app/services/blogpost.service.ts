@@ -17,7 +17,7 @@ export class BlogpostService {
   };
 
   private backEndBaseURL: String = 'http://localhost:8080';
-  private feedURL: String = 'blogpost';
+  private blogpostURL: String = 'blogpost';
   private allposts: String = 'blogpostall';
   private eventSource: EventSource;
 
@@ -35,7 +35,7 @@ export class BlogpostService {
 
   getMyFeed(): Observable<Post> {
     let observableFeed: Observable<Post> = Observable.create((observer) => {
-      let url = [this.backEndBaseURL, this.feedURL].join('/');
+      let url = [this.backEndBaseURL, this.blogpostURL].join('/');
       this.log('Feed url: ' + url);
       try {
         this.eventSource = new EventSource(url);
@@ -65,15 +65,28 @@ export class BlogpostService {
     return observableFeed;
   }
 
-  savePost(post: Post) {
-    if (!post.id) {
-      post.id = '1as687' + Date.now;
-      // this.myFeed.push(post)
-    } else {
-      // this.myFeed.find(memeber => memeber.id === post.id).text = post.text;
-    }
+  create(post: Post) {
+    let url = [this.backEndBaseURL, this.blogpostURL].join('/');
+    this.log('POST url: ' + url);
+
+    return this.httpClient.post<Post>(url,post, this.httpOptions).
+      pipe(
+        tap(_ => this.log("Created post " + post.id)),
+        catchError(this.handleError<Post>('savePost', undefined))
+      );
   }
 
+  update(post: Post) {
+    let url = [this.backEndBaseURL, this.blogpostURL, post.id].join('/');
+    this.log('PUT url: ' + url);
+
+    return this.httpClient.put<Post>(url,post, this.httpOptions).
+      pipe(
+        tap(_ => this.log("Updated post " + post.id)),
+        catchError(this.handleError<Post>('savePost', undefined))
+      );
+  }
+  
   private handleError<T>(operation = 'operation', fallbackResult?: T) {
     return (error: any): Observable<T> => {
       this.log(`${operation} failed: ${error.message}`);

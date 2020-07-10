@@ -11,12 +11,14 @@ export class PostComponent implements OnInit {
 
   @Input() post: Post;
   @Input('master') master: string;
+  private isNew = false;
 
   constructor(private blogpostservice: BlogpostService) { }
 
   ngOnInit() {
-    if (this.post === undefined){
-      this.post = new Post('','','');
+    if (this.post === undefined) {
+      this.isNew = true;
+      this.post = new Post('', '', '');
     }
   }
 
@@ -24,12 +26,16 @@ export class PostComponent implements OnInit {
     this.post.text = value;
   }
 
-  onAuthorKey(value:string) {
+  onAuthorKey(value: string) {
     this.post.author = value;
   }
 
   onSaveClick() {
-    this.blogpostservice.savePost(this.post);
+    if (this.isNew) {
+      this.blogpostservice.create(this.post).subscribe(newPost => this.post = newPost);
+    } else {
+      this.blogpostservice.update(this.post).subscribe(updatedPost => this.post = updatedPost);
+    }
   }
 
 }
