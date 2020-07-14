@@ -2,10 +2,11 @@ package io.entangledword.services;
 
 import java.time.Duration;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import io.entangledword.model.post.BlogpostDTO;
-import io.entangledword.persist.entity.Blogpost;
+import io.entangledword.persist.entity.BlogpostMongoDoc;
 import io.entangledword.persist.repos.BlogpostRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -15,10 +16,12 @@ public class BlogpostServicePersist implements BlogpostService {
 	private static final int DELAY_PER_ITEM_MS = 100;
 
 	private final BlogpostRepository repo;
+	private final ModelMapper mapper;
 
-	public BlogpostServicePersist(BlogpostRepository repo) {
+	public BlogpostServicePersist(BlogpostRepository repo, ModelMapper mapper) {
 		super();
 		this.repo = repo;
+		this.mapper = mapper;
 	}
 
 	@Override
@@ -46,12 +49,12 @@ public class BlogpostServicePersist implements BlogpostService {
 		return repo.findAll().delayElements(Duration.ofMillis(DELAY_PER_ITEM_MS)).map(this::toDTO);
 	}
 
-	protected Blogpost toEntity(BlogpostDTO dto) {
-		return Blogpost.newInstance(dto.getID(), dto.getTitle(), dto.getText(), dto.getAuthor());
+	protected BlogpostMongoDoc toEntity(BlogpostDTO dto) {
+		return mapper.map(dto, BlogpostMongoDoc.class);
 	}
 
-	protected BlogpostDTO toDTO(Blogpost entity) {
-		return BlogpostDTO.newInstance(entity.getId(), entity.getTitle(), entity.getText(), entity.getAuthor());
+	protected BlogpostDTO toDTO(BlogpostMongoDoc entity) {
+		return mapper.map(entity, BlogpostDTO.class);
 	}
 
 }

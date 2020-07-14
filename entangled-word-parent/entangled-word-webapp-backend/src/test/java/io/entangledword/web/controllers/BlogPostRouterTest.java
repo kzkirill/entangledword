@@ -2,6 +2,7 @@ package io.entangledword.web.controllers;
 
 import static io.entangledword.web.controllers.BlogpostHandler.URI_BASE;
 import static io.entangledword.web.controllers.BlogpostHandler.URI_ID;
+import static io.entangledword.model.post.BlogpostDTO.newInstance;
 import static io.entangledword.web.controllers.BlogpostHandler.URI_ALL;
 import static java.lang.String.format;
 import static java.time.Duration.ofMillis;
@@ -54,15 +55,15 @@ class BlogPostRouterTest {
 
 	@Test
 	void postTest() {
-		testClient.post().bodyValue(new BlogpostDTO("Today's post", "1112sasdewq", testAuthor, testAuthor)).exchange()
+		testClient.post().bodyValue(newInstance("Today's post", "1112sasdewq", testAuthor, testAuthor)).exchange()
 				.expectStatus().isCreated();
 	}
 
 	@Test
 	void putTest() {
 		testClient.put().uri("/" + getRegustTestee.getID())
-				.bodyValue(new BlogpostDTO("Put post", "put1112sasdewq", testAuthor, testAuthor)).exchange()
-				.expectStatus().isOk();
+				.bodyValue(newInstance("Put post", "put1112sasdewq", testAuthor, testAuthor)).exchange().expectStatus()
+				.isOk();
 	}
 
 	@Test
@@ -94,16 +95,16 @@ class BlogPostRouterTest {
 				.returnResult(BlogpostDTO.class);
 
 		StepVerifier.create(result.getResponseBody())
-				.expectNext(new BlogpostDTO("Streamed N0", "ID0", testAuthor, testAuthor),
-						new BlogpostDTO("Streamed N1", "ID1", testAuthor, testAuthor),
-						new BlogpostDTO("Streamed N2", "ID2", testAuthor, testAuthor))
+				.expectNext(newInstance("Streamed N0", "ID0", testAuthor, testAuthor),
+						newInstance("Streamed N1", "ID1", testAuthor, testAuthor),
+						newInstance("Streamed N2", "ID2", testAuthor, testAuthor))
 				.expectNextCount(4).consumeNextWith(blogpost -> assertThat(blogpost.getText()).endsWith("7"))
 				.thenCancel().verify();
 
 	}
 
 	protected BlogpostDTO objectForGetTest() {
-		return new BlogpostDTO("Get request testee", "getrequesttestee111", testAuthor, testAuthor);
+		return newInstance("Get request testee", "getrequesttestee111", testAuthor, testAuthor);
 	}
 
 	protected Flux<BlogpostDTO> produceGetAllFlux() {
@@ -111,7 +112,7 @@ class BlogPostRouterTest {
 	}
 
 	private BlogpostDTO getFirstForAll() {
-		return new BlogpostDTO("First for getAll", "getAll001", testAuthor, testAuthor);
+		return newInstance("First for getAll", "getAll001", testAuthor, testAuthor);
 	}
 
 	protected class CRUDControllerMock implements RESTHandler {
@@ -157,7 +158,7 @@ class BlogPostRouterTest {
 		@Override
 		public Mono<ServerResponse> getStream(ServerRequest serverRequest) {
 			return ok().contentType(TEXT_EVENT_STREAM).body(Flux.interval(ofMillis(100)).take(50)
-					.onBackpressureBuffer(50).map(index -> new BlogpostDTO(format("ID%d", index),
+					.onBackpressureBuffer(50).map(index -> newInstance(format("ID%d", index),
 							format("Streamed N%d", index), format("Streamed text N%d", index), testAuthor)),
 					BlogpostDTO.class);
 		}

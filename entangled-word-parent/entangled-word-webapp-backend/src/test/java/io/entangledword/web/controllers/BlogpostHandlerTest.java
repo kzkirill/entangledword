@@ -1,5 +1,6 @@
 package io.entangledword.web.controllers;
 
+import static io.entangledword.model.post.BlogpostDTO.newInstance;
 import static java.lang.String.format;
 import static java.time.Duration.ofMillis;
 
@@ -20,24 +21,25 @@ class BlogpostHandlerTest extends BlogPostRouterTest {
 
 	@Override
 	protected BlogpostDTO objectForGetTest() {
-		return new BlogpostDTO("For get", "1", testAuthor, testAuthor);
+		return newInstance("For get", "1", testAuthor, testAuthor);
 	}
 
 	private class ServiceMock implements BlogpostService {
 
 		@Override
 		public Mono<BlogpostDTO> save(BlogpostDTO newPost) {
-			return Mono.just(new BlogpostDTO("For save", "2", testAuthor, testAuthor));
+			return Mono.just(newInstance("For save", "2", testAuthor, testAuthor));
 		}
 
 		@Override
 		public Mono<BlogpostDTO> delete(BlogpostDTO newPost) {
-			return Mono.just(new BlogpostDTO("For delete", "3", testAuthor, testAuthor));
+			return Mono.just(newInstance("For delete", "3", testAuthor, testAuthor));
 		}
 
 		@Override
 		public Flux<BlogpostDTO> getAll() {
-			return Flux.just(new BlogpostDTO("Get all 1", "11", testAuthor, testAuthor), new BlogpostDTO("Get all 2", "12", testAuthor, testAuthor));
+			return Flux.just(newInstance("Get all 1", "11", testAuthor, testAuthor),
+					newInstance("Get all 2", "12", testAuthor, testAuthor));
 		}
 
 		@Override
@@ -49,7 +51,8 @@ class BlogpostHandlerTest extends BlogPostRouterTest {
 		@Override
 		public Flux<BlogpostDTO> getStream() {
 			return Flux.interval(ofMillis(100)).take(50).onBackpressureBuffer(50)
-					.map(index -> new BlogpostDTO(format("ID%d", index), format("Streamed N%d", index),"Streamed text", testAuthor));
+					.map(index -> newInstance(format("ID%d", index), format("Streamed N%d", index), "Streamed text",
+							testAuthor));
 		}
 
 	}

@@ -8,7 +8,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>entangled-word-persistence</artifactId>
- 	<packaging>jar</packaging>
+	<packaging>jar</packaging>
 
 	<name>Blogging application persistence</name>
 	<description>Mongo DB persistence implementation.</description>
@@ -26,6 +26,12 @@
 			<groupId>io.entangledword</groupId>
 			<artifactId>entangled-word-common</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>2.3.8</version>
 		</dependency>
 	</dependencies>
 </project>

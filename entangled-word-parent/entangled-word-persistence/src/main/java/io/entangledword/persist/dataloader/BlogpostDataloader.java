@@ -2,6 +2,10 @@ package io.entangledword.persist.dataloader;
 
 import static java.lang.String.format;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
@@ -10,7 +14,8 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-import io.entangledword.persist.entity.Blogpost;
+import io.entangledword.model.post.BlogTextEntry;
+import io.entangledword.persist.entity.BlogpostMongoDoc;
 import io.entangledword.persist.repos.BlogpostRepository;
 
 @Component
@@ -40,9 +45,16 @@ public class BlogpostDataloader implements ApplicationRunner {
 
 	}
 
-	private Blogpost instanceFromIndex(int index) {
-		return Blogpost.newInstance(format("ID%d", index), format("Title N%d", index), format("From loader N%d", index),
+	private BlogpostMongoDoc instanceFromIndex(int index) {
+		String title = format("Title N%d", index);
+		BlogpostMongoDoc newInstance = BlogpostMongoDoc.newInstance(title, format("From loader N%d", index),
 				"Author from loader");
+		List<BlogTextEntry> replies = Arrays
+				.asList(BlogTextEntry.newInstance("Reply to " + title, "Comment 1", "Commenter 1"));
+		newInstance.setReplies(replies);
+		Set<String> tags = new HashSet<String>(Arrays.asList("tag1", "tag2"));
+		newInstance.setTags(tags);
+		return newInstance;
 	}
 
 	private Long repoCount() {
