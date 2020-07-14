@@ -1,6 +1,8 @@
-<div>Author: </div>
-<input #postauthor (keyup)="onAuthorKey(postauthor.value)" value="{{post.author}}" />
-<div>Text: </div>
-<input #posttext (keyup)="onTextkey(posttext.value)" value="{{post.text}}" />
-<br>
-<button (click)="onSaveClick()">Save</button>
+<div class="w3-card">
+    <div>Author: </div>
+    <input #postauthor (keyup)="onAuthorKey(postauthor.value)" value="{{post.author}}" />
+    <div>Text: </div>
+    <input #posttext (keyup)="onTextkey(posttext.value)" value="{{post.text}}" />
+    <br>
+    <button class="w3-button w3-green" (click)="onSaveClick()">Save</button>
+</div>

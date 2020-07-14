@@ -1,10 +1,12 @@
+<div class="w3-container w3-sand">
   <h1>
     {{title}}
   </h1>
-  <nav>
-    <a routerLink="/newpost">New Post </a>
-    <a routerLink="/feed">Feed </a>
-    <a routerLink="/all">All Posts </a>
+  <nav class="w3-bar w3-teal w3-border">
+    <a class="w3-bar-item w3-button w3-mobile w3-border-right" routerLink="/newpost">New Post </a>
+    <a class="w3-bar-item w3-button w3-mobile w3-border-right" routerLink="/feed">Feed </a>
+    <a class="w3-bar-item w3-button w3-mobile w3-border-right" routerLink="/all">All Posts </a>
   </nav>
   <router-outlet></router-outlet>
 
+</div>
