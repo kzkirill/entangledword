@@ -18,7 +18,7 @@ export class PostComponent implements OnInit {
   ngOnInit() {
     if (this.post === undefined) {
       this.isNew = true;
-      this.post = new Post('', '', '');
+      this.post = new Post('', '', '','', new Date(), new Date());
     }
   }
 

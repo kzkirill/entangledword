@@ -42,7 +42,7 @@ export class BlogpostService {
         this.eventSource.onmessage = (event) => {
           this.log('got event data' + event['data']);
           let json = JSON.parse(event.data);
-          observer.next(new Post(json['id'], json['author'], json['text']));
+          observer.next(new Post(json['id'], json['author'], json['text'], json['title'], json['created'], json['updated']));
         }
         this.eventSource.onerror = (error) => {
           this.log('Event source error: ' + error);
@@ -69,7 +69,7 @@ export class BlogpostService {
     let url = [this.backEndBaseURL, this.blogpostURL].join('/');
     this.log('POST url: ' + url);
 
-    return this.httpClient.post<Post>(url,post, this.httpOptions).
+    return this.httpClient.post<Post>(url, post, this.httpOptions).
       pipe(
         tap(_ => this.log("Created post " + post.id)),
         catchError(this.handleError<Post>('savePost', undefined))
@@ -80,13 +80,13 @@ export class BlogpostService {
     let url = [this.backEndBaseURL, this.blogpostURL, post.id].join('/');
     this.log('PUT url: ' + url);
 
-    return this.httpClient.put<Post>(url,post, this.httpOptions).
+    return this.httpClient.put<Post>(url, post, this.httpOptions).
       pipe(
         tap(_ => this.log("Updated post " + post.id)),
         catchError(this.handleError<Post>('savePost', undefined))
       );
   }
-  
+
   private handleError<T>(operation = 'operation', fallbackResult?: T) {
     return (error: any): Observable<T> => {
       this.log(`${operation} failed: ${error.message}`);
