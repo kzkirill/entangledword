@@ -1,0 +1,30 @@
+<div class="w3-container w3-center">
+    <div class="w3-row">
+        <div class="w3-col l8 s12">
+            <h1>{{title}}</h1>
+            <form [formGroup]="authForm" (ngSubmit)="submitForm()">
+                <fieldset [disabled]="isSubmitting">
+                    <fieldset>
+                        <input
+                                formControlName="username"
+                                placeholder="Username"
+                                class="w3-input"
+                                type="text"/>
+                    </fieldset>
+                    <fieldset>
+                        <input
+                                formControlName="email"
+                                placeholder="Email"
+                                class="w3-input"
+                                type="text"
+                                *ngIf="authType == 'register'"/>
+                    </fieldset>
+                    <button class="w3-button w3-padding-large w3-green w3-border" [disabled]="!authForm.valid"
+                            type="submit">
+                        {{ title }}
+                    </button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
