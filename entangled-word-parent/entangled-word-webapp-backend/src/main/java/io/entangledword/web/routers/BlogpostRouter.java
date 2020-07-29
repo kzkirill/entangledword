@@ -10,26 +10,26 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
 import static org.springframework.web.reactive.function.server.RequestPredicates.PUT;
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
+import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
-import org.springframework.web.reactive.function.server.HandlerFunction;
 import org.springframework.web.reactive.function.server.RouterFunction;
-import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
-import io.entangledword.web.config.WebFluxConfig;
 import io.entangledword.web.controllers.RESTHandler;
+import reactor.core.publisher.Mono;
 
 @Configuration
 public class BlogpostRouter {
 
 	@Bean
 	public RouterFunction<ServerResponse> routerFunction(RESTHandler controller) {
-		return RouterFunctions.route(POST(URI_BASE).and(accept(APPLICATION_JSON)), controller::post)
-				.andRoute(GET("/"), redirectToIndex())
+		return route(POST(URI_BASE).and(accept(APPLICATION_JSON)), controller::post)
 				.andRoute(GET(URI_BASE).and(accept(TEXT_EVENT_STREAM)), controller::getStream)
 				.andRoute(GET(URI_BASE + "/{" + URI_ID + "}").and(accept(APPLICATION_JSON)), controller::get)
 				.andRoute(PUT(URI_BASE + "/{" + URI_ID + "}").and(accept(APPLICATION_JSON)), controller::put)
@@ -37,8 +37,15 @@ public class BlogpostRouter {
 				.andRoute(GET(URI_BASE + URI_ALL).and(accept(APPLICATION_JSON)), controller::getAll);
 	}
 
-	private HandlerFunction<ServerResponse> redirectToIndex() {
-		return request -> ok().contentType(MediaType.TEXT_HTML).bodyValue(WebFluxConfig.indexPageResource());
+	@Bean
+	public RouterFunction<ServerResponse> htmlRouter(@Value("classpath:/resources/static/index.html") Resource html) {
+		return route(GET("/"), request -> getIndexResponse(html))
+				.andRoute(GET("/feed"), request -> getIndexResponse(html))
+				.andRoute(GET("/newpost"), request -> getIndexResponse(html))
+				.andRoute(GET("/login"), request -> getIndexResponse(html));
 	}
 
+	private Mono<ServerResponse> getIndexResponse(Resource html) {
+		return ok().contentType(MediaType.TEXT_HTML).bodyValue(html);
+	}
 }
