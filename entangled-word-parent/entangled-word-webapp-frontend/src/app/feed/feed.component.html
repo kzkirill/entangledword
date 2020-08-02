@@ -3,14 +3,14 @@
     <div class="w3-row">
         <div class="w3-col l8 s12">
             <nav class="w3-bar w3-teal w3-border">
-                <a class="w3-bar-item w3-button w3-mobile w3-border-right" routerLink="/newpost">New Post </a>
+                <a class="w3-bar-item w3-button w3-mobile w3-border-right" (click)="setNewPost()" routerLink="/newpost">New Post </a>
                 <a class="w3-bar-item w3-button w3-mobile w3-border-right" (click)="getFeed('generalFeed')">{{generalFeedLabel}}</a>
             </nav>
-            <ul class="w3-ul">
-                <li *ngFor="let post of feed">
+            <div class="w3-ul">
+                <div *ngFor="let post of feed">
                     <app-post [post]="post" [master]="master"></app-post>
-                </li>
-            </ul>
+                </div>
+            </div>
         </div>
         <div class="w3-col l4">
             <!-- About Card -->

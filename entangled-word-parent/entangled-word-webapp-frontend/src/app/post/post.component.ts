@@ -1,41 +1,37 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Post } from '../model/post';
-import { BlogpostService } from '../services/blogpost.service';
+import {Component, OnInit, Input, NgZone} from '@angular/core';
+import {Post} from '../model/post';
+import {BlogpostService} from '../services/blogpost.service';
+import {PostDataBus} from './post.data.bus';
+import {PostState} from './poststate';
+import {Router} from '@angular/router';
 
 @Component({
-  selector: 'app-post',
-  templateUrl: './post.component.html',
-  styleUrls: ['./post.component.css']
+    selector: 'app-post',
+    templateUrl: './post.component.html',
+    styleUrls: ['./post.component.css']
 })
 export class PostComponent implements OnInit {
 
-  @Input() post: Post;
-  @Input('master') master: string;
-  private isNew = false;
+    @Input() post: Post;
+    @Input('master') master: string;
+    protected isNew = false;
 
-  constructor(private blogpostservice: BlogpostService) { }
-
-  ngOnInit() {
-    if (this.post === undefined) {
-      this.isNew = true;
-      this.post = new Post('', '', '','', new Date(), new Date());
+    constructor(protected postDataBus: PostDataBus,
+                private router: Router,
+                private ngZone: NgZone) {
     }
-  }
 
-  onTextkey(value: string) {
-    this.post.text = value;
-  }
-
-  onAuthorKey(value: string) {
-    this.post.author = value;
-  }
-
-  onSaveClick() {
-    if (this.isNew) {
-      this.blogpostservice.create(this.post).subscribe(newPost => this.post = newPost);
-    } else {
-      this.blogpostservice.update(this.post).subscribe(updatedPost => this.post = updatedPost);
+    ngOnInit() {
     }
-  }
+
+    getTextPreview(): String {
+        return this.post.text.split(' ').slice(0, 3).join(' ') + '...';
+    }
+
+    detailsClicked() {
+        this.postDataBus.setState(PostState.newFromPostReadOnly(this.post));
+        this.ngZone.run(() =>
+            this.router.navigate(['/newpost']).then(nav => console.log(nav)));
+    }
 
 }

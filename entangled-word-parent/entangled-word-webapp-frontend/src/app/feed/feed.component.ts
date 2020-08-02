@@ -2,6 +2,8 @@ import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
 import {BlogpostService} from '../services/blogpost.service';
 import {Post} from '../model/post';
 import {Observable} from 'rxjs';
+import {PostDataBus} from '../post/post.data.bus';
+import {PostState, STATE_NEW} from '../post/poststate';
 
 @Component({
     selector: 'app-feed',
@@ -11,11 +13,13 @@ import {Observable} from 'rxjs';
 export class FeedComponent implements OnInit {
 
     feed: Post[];
-    GENERAL: String = 'generalFeed';
+    readonly GENERAL: String = 'generalFeed';
     readonly generalFeedLabel = 'General Feed';
     readonly myFeedLabel = 'My Feed';
 
-    constructor(private blogpostservice: BlogpostService, private cdr: ChangeDetectorRef) {
+    constructor(private blogpostservice: BlogpostService,
+                private cdr: ChangeDetectorRef,
+                private postDataBus:PostDataBus) {
     }
 
     ngOnInit() {
@@ -30,4 +34,7 @@ export class FeedComponent implements OnInit {
         });
     }
 
+    setNewPost() {
+        this.postDataBus.setState(PostState.newInstance(STATE_NEW, Post.newInstance('','','','',null,null)));
+    }
 }

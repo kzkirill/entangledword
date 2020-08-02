@@ -42,7 +42,7 @@ export class BlogpostService {
         this.eventSource.onmessage = (event) => {
           this.log('got event data' + event['data']);
           let json = JSON.parse(event.data);
-          observer.next(new Post(json['id'], json['author'], json['text'], json['title'], json['created'], json['updated']));
+          observer.next(Post.newInstance(json['id'], json['author'], json['text'], json['title'], json['created'], json['updated']));
         }
         this.eventSource.onerror = (error) => {
           this.log('Event source error: ' + error);
