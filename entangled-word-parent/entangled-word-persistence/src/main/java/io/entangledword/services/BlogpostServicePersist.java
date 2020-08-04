@@ -2,7 +2,7 @@ package io.entangledword.services;
 
 import java.time.Duration;
 
-import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import io.entangledword.model.post.BlogpostDTO;
@@ -12,16 +12,15 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
-public class BlogpostServicePersist implements BlogpostService {
+public class BlogpostServicePersist extends DTOMappingService<BlogpostDTO, BlogpostMongoDoc> implements BlogpostService {
+	
 	private static final int DELAY_PER_ITEM_MS = 100;
 
-	private final BlogpostRepository repo;
-	private final ModelMapper mapper;
+	@Autowired
+	private BlogpostRepository repo;
 
-	public BlogpostServicePersist(BlogpostRepository repo, ModelMapper mapper) {
-		super();
-		this.repo = repo;
-		this.mapper = mapper;
+	public BlogpostServicePersist() {
+		super(BlogpostMongoDoc.class, BlogpostDTO.class);
 	}
 
 	@Override
@@ -48,13 +47,11 @@ public class BlogpostServicePersist implements BlogpostService {
 	public Flux<BlogpostDTO> getStream() {
 		return repo.findAll().delayElements(Duration.ofMillis(DELAY_PER_ITEM_MS)).map(this::toDTO);
 	}
-
-	protected BlogpostMongoDoc toEntity(BlogpostDTO dto) {
-		return mapper.map(dto, BlogpostMongoDoc.class);
+	
+	@Override
+	public Mono<Void> delete(String id) {
+		return repo.deleteById(id);
 	}
 
-	protected BlogpostDTO toDTO(BlogpostMongoDoc entity) {
-		return mapper.map(entity, BlogpostDTO.class);
-	}
 
 }

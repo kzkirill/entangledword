@@ -10,4 +10,5 @@ public interface BlogpostService {
 	public Flux<BlogpostDTO> getAll();
 	public Mono<BlogpostDTO> getByID(String id);
 	public Flux<BlogpostDTO> getStream();
+	public Mono<Void> delete(String id);
 }

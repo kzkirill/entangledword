@@ -55,6 +55,12 @@ class BlogpostHandlerTest extends BlogPostRouterTest {
 							testAuthor));
 		}
 
+		@Override
+		public Mono<Void> delete(String id) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 }
