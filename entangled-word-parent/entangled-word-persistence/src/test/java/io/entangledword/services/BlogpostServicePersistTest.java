@@ -1,18 +1,17 @@
 package io.entangledword.services;
 
 import static java.time.LocalDateTime.now;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static reactor.core.publisher.Mono.just;
 import static reactor.test.StepVerifier.create;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,7 +26,6 @@ import io.entangledword.persist.repos.BlogpostRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@TestInstance(Lifecycle.PER_CLASS)
 @SpringBootTest
 class BlogpostServicePersistTest {
 
@@ -49,6 +47,7 @@ class BlogpostServicePersistTest {
 
 	@MockBean
 	private BlogpostRepository repo;
+	
 	private Class<BlogpostMongoDoc> entityClass = BlogpostMongoDoc.class;
 	private String testId1 = "save 01 ID";
 	private BlogpostMongoDoc postMongoDOc = (BlogpostMongoDoc) initialize(
@@ -56,33 +55,41 @@ class BlogpostServicePersistTest {
 	private BlogpostDTO postDTO = (BlogpostDTO) initialize(
 			BlogpostDTO.newInstance(testId1, "save 01 title", "save 01 text", "save 01 author"));
 
-	@BeforeAll
-	void setup() {
+	@Test
+	void whenSaved_thenReturnsTheSavedBlogpost() {
 		when(repo.save(any(entityClass))).thenReturn(just(postMongoDOc));
-//		when(repo.deleteById(anyString())).thenReturn(Mono.empty().then());
-//		when(repo.findById(eq(testId1))).thenReturn(just(postMongoDOc));
-//		when(repo.findAll()).thenReturn(Flux.just(postMongoDOc, postMongoDOc));
-	}
-
-	@Test
-	void testSave() {
 		create(testee.save(postDTO)).expectNextMatches(this::matchPost).expectComplete().verify();
+		verify(repo).save(any(entityClass));
 	}
 
 	@Test
-	void testGetStream() {
-//		create(testee.getAll()).expectNextMatches(this::matchPost).expectNextMatches(this::matchPost).expectComplete()
-//				.verify();
+	void whenStreamAsked_thenReturnsFluxOfAllPosts() {
+		when(repo.findAll()).thenReturn(Flux.just(postMongoDOc, postMongoDOc));
+		create(testee.getAll()).expectNextMatches(this::matchPost).expectNextMatches(this::matchPost).expectComplete()
+				.verify();
+		verify(repo).findAll();
 	}
 
 	@Test
-	void testDelete() {
-//		create(testee.delete(testId1)).expectComplete().verify();
+	void whenDeleteByPostObject_thenReturnesDeletedPost() {
+		when(repo.delete(eq(postMongoDOc))).thenReturn(Mono.empty().then());
+		create(testee.delete(postDTO)).expectNextMatches(this::matchPost).expectComplete().verify();
+		verify(repo).delete(eq(postMongoDOc));
 	}
 
 	@Test
-	void testGetByID() {
-//		create(testee.getByID(testId1)).expectNextMatches(this::matchPost).expectComplete().verify();
+	void whenDeleteByID_thenReturnesNothing() {
+		when(repo.deleteById(eq(testId1))).thenReturn(Mono.empty().then());
+		create(testee.delete(testId1)).expectComplete().verify();
+		verify(repo).deleteById(eq(testId1));
+	}
+
+	@Test
+	void whenGetByID_thenRetursTheBlogpostObject() {
+		when(repo.findById(eq(testId1))).thenReturn(just(postMongoDOc));
+		create(testee.getByID(testId1)).expectNextMatches(this::matchPost).expectComplete().verify();
+		verify(repo).findById(testId1);
+		verify(repo).findById(eq(testId1));
 	}
 
 	private boolean matchPost(BlogpostDTO saved) {

@@ -1,5 +1,7 @@
 package io.entangledword.services;
 
+import static reactor.core.publisher.Mono.just;
+
 import java.time.Duration;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +32,8 @@ public class BlogpostServicePersist extends DTOMappingService<BlogpostDTO, Blogp
 
 	@Override
 	public Mono<BlogpostDTO> delete(BlogpostDTO dtoToDelete) {
-		return repo.delete(toEntity(dtoToDelete)).map(voidValue -> dtoToDelete);
+		repo.delete(toEntity(dtoToDelete));
+		return  just(dtoToDelete);
 	}
 
 	@Override
