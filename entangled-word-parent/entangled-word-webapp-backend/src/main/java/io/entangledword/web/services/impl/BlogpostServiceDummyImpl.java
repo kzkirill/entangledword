@@ -1,12 +1,12 @@
 package io.entangledword.web.services.impl;
 
-import static io.entangledword.model.post.BlogpostDTO.newInstance;
+import static io.entangledword.domain.post.BlogpostDTO.newInstance;
 import static java.lang.String.format;
 import static java.time.Duration.ofMillis;
 import static reactor.core.publisher.Mono.empty;
 import static reactor.core.publisher.Mono.just;
 
-import io.entangledword.model.post.BlogpostDTO;
+import io.entangledword.domain.post.BlogpostDTO;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

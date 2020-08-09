@@ -8,7 +8,6 @@ import reactor.core.publisher.Mono;
 public interface RESTHandler {
 
 	public Mono<ServerResponse> get(ServerRequest serverRequest);
-	public Mono<ServerResponse> getAll(ServerRequest serverRequest);
 	public Mono<ServerResponse> getStream(ServerRequest serverRequest);
 	public Mono<ServerResponse> post(ServerRequest serverRequest);
 	public Mono<ServerResponse> put(ServerRequest serverRequest);

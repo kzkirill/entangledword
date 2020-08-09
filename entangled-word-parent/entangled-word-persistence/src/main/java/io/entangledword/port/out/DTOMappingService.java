@@ -1,4 +1,4 @@
-package io.entangledword.services;
+package io.entangledword.port.out;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

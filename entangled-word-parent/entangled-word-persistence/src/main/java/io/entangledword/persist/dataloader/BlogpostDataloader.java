@@ -14,7 +14,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-import io.entangledword.model.post.BlogTextEntry;
+import io.entangledword.domain.post.BlogTextEntry;
 import io.entangledword.persist.entity.BlogpostMongoDoc;
 import io.entangledword.persist.repos.BlogpostRepository;
 

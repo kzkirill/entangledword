@@ -6,7 +6,7 @@ import static java.time.LocalDateTime.of;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import io.entangledword.model.post.Blogpost;
+import io.entangledword.domain.post.Blogpost;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

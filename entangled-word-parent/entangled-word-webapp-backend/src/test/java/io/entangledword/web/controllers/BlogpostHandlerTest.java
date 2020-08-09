@@ -1,13 +1,13 @@
 package io.entangledword.web.controllers;
 
-import static io.entangledword.model.post.BlogpostDTO.newInstance;
+import static io.entangledword.domain.post.BlogpostDTO.newInstance;
 import static java.lang.String.format;
 import static java.time.Duration.ofMillis;
 
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
-import io.entangledword.model.post.BlogpostDTO;
+import io.entangledword.domain.post.BlogpostDTO;
 import io.entangledword.services.BlogpostService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
 class BlogpostHandlerTest extends BlogPostRouterTest {
 
 	protected RESTHandler createHandler() {
-		return new BlogpostHandler(new ServiceMock());
+		return new BlogpostHandler(null,null);
 	}
 
 	@Override

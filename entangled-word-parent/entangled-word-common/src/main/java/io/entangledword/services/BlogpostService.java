@@ -1,6 +1,6 @@
 package io.entangledword.services;
 
-import io.entangledword.model.post.BlogpostDTO;
+import io.entangledword.domain.post.BlogpostDTO;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

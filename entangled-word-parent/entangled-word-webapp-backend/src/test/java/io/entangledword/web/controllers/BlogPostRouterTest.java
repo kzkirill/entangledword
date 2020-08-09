@@ -1,9 +1,8 @@
 package io.entangledword.web.controllers;
 
+import static io.entangledword.domain.post.BlogpostDTO.newInstance;
 import static io.entangledword.web.controllers.BlogpostHandler.URI_BASE;
 import static io.entangledword.web.controllers.BlogpostHandler.URI_ID;
-import static io.entangledword.model.post.BlogpostDTO.newInstance;
-import static io.entangledword.web.controllers.BlogpostHandler.URI_ALL;
 import static java.lang.String.format;
 import static java.time.Duration.ofMillis;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,7 +30,7 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import org.springframework.web.reactive.function.server.ServerResponse.BodyBuilder;
 
-import io.entangledword.model.post.BlogpostDTO;
+import io.entangledword.domain.post.BlogpostDTO;
 import io.entangledword.web.routers.BlogpostRouter;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -44,10 +43,12 @@ class BlogPostRouterTest {
 	private WebTestClient testClient;
 	private BlogpostDTO getRegustTestee;
 	protected final String testAuthor = "Conan Doyle";
+	private CRUDControllerMock controllerMock;
 
 	@BeforeAll
 	public void setUp() {
-		RouterFunction<ServerResponse> routerFunction = new BlogpostRouter().routerFunction(new CRUDControllerMock());
+		controllerMock = new CRUDControllerMock();
+		RouterFunction<ServerResponse> routerFunction = new BlogpostRouter().routerFunction(controllerMock);
 		assertThat(routerFunction).isNotNull();
 		getRegustTestee = objectForGetTest();
 		testClient = WebTestClient.bindToRouterFunction(routerFunction).configureClient().baseUrl(URI_BASE).build();
@@ -82,22 +83,14 @@ class BlogPostRouterTest {
 	}
 
 	@Test
-	void getAllTest() {
-		testClient.get().uri(URI_ALL).exchange().expectStatus().isOk().expectHeader()
-				.contentType(MediaType.APPLICATION_JSON).expectBodyList(BlogpostDTO.class)
-				.value(people -> assertThat(people).contains(getFirstForAll()));
-	}
-
-	@Test
 	void getAllStreamTest() {
 		FluxExchangeResult<BlogpostDTO> result = this.testClient.get().accept(TEXT_EVENT_STREAM).exchange()
 				.expectStatus().isOk().expectHeader().contentTypeCompatibleWith(TEXT_EVENT_STREAM)
 				.returnResult(BlogpostDTO.class);
 
 		StepVerifier.create(result.getResponseBody())
-				.expectNext(newInstance("Streamed N0", "ID0", testAuthor, testAuthor),
-						newInstance("Streamed N1", "ID1", testAuthor, testAuthor),
-						newInstance("Streamed N2", "ID2", testAuthor, testAuthor))
+				.expectNext(controllerMock.fromIndexForStream(0l), controllerMock.fromIndexForStream(1l),
+						controllerMock.fromIndexForStream(2l))
 				.expectNextCount(4).consumeNextWith(blogpost -> assertThat(blogpost.getText()).endsWith("7"))
 				.thenCancel().verify();
 
@@ -141,11 +134,6 @@ class BlogPostRouterTest {
 		}
 
 		@Override
-		public Mono<ServerResponse> getAll(ServerRequest serverRequest) {
-			return okWithJason().body(produceGetAllFlux(), BlogpostDTO.class);
-		}
-
-		@Override
 		public Mono<ServerResponse> put(ServerRequest serverRequest) {
 			return okWithJason().body(fromPublisher(serverRequest.bodyToMono(BlogpostDTO.class), BlogpostDTO.class));
 		}
@@ -157,10 +145,15 @@ class BlogPostRouterTest {
 
 		@Override
 		public Mono<ServerResponse> getStream(ServerRequest serverRequest) {
-			return ok().contentType(TEXT_EVENT_STREAM).body(Flux.interval(ofMillis(100)).take(50)
-					.onBackpressureBuffer(50).map(index -> newInstance(format("ID%d", index),
-							format("Streamed N%d", index), format("Streamed text N%d", index), testAuthor)),
+			return ok().contentType(TEXT_EVENT_STREAM).body(
+					Flux.interval(ofMillis(100)).take(50).onBackpressureBuffer(50).map(this::fromIndexForStream),
 					BlogpostDTO.class);
+		}
+
+		private BlogpostDTO fromIndexForStream(Long index) {
+			BlogpostDTO result = newInstance(format("ID%d", index), format("Streamed N%d", index),
+					format("Streamed text N%d", index), testAuthor);
+			return result;
 		}
 
 	}

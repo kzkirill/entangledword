@@ -1,4 +1,4 @@
-package io.entangledword.model.post;
+package io.entangledword.domain.post;
 
 import java.time.LocalDateTime;
 import java.util.List;

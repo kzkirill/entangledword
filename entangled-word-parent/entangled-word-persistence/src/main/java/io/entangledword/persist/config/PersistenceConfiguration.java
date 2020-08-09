@@ -4,9 +4,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import io.entangledword.model.post.BlogpostDTO;
+import io.entangledword.domain.post.BlogpostDTO;
 import io.entangledword.persist.entity.BlogpostMongoDoc;
-import io.entangledword.services.DTOMappingService;
+import io.entangledword.port.out.DTOMappingService;
 
 @Configuration
 public class PersistenceConfiguration {

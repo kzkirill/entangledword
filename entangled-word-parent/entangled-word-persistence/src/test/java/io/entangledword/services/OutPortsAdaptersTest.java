@@ -19,35 +19,58 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 
-import io.entangledword.model.post.Blogpost;
-import io.entangledword.model.post.BlogpostDTO;
+import io.entangledword.domain.post.Blogpost;
+import io.entangledword.domain.post.BlogpostDTO;
 import io.entangledword.persist.entity.BlogpostMongoDoc;
 import io.entangledword.persist.repos.BlogpostRepository;
-import reactor.core.publisher.Flux;
+import io.entangledword.port.out.CreatePostAdapter;
+import io.entangledword.port.out.DTOMappingService;
+import io.entangledword.port.out.DeletePostAdapter;
+import io.entangledword.port.out.FindPostsAdapter;
+import io.entangledword.port.out.FindPostsPort;
 import reactor.core.publisher.Mono;
 
 @SpringBootTest
-class BlogpostServicePersistTest {
+class OutPortsAdaptersTest {
 
 	@TestConfiguration
-	static class BlogpostServicePersistTestConfiguration {
+	static class OutPortsAdaptersTestConfiguration {
 		@Bean
-		public BlogpostService service() {
-			return new BlogpostServicePersist();
+		public FindPostsPort findPostsPort() {
+			return new FindPostsAdapter();
+		}
+
+		@Bean
+		public CreatePostAdapter createPostsPort() {
+			return new CreatePostAdapter();
+		}
+
+		@Bean
+		public DeletePostAdapter deletePostsPort() {
+			return new DeletePostAdapter();
 		}
 
 		@Bean
 		public ModelMapper modelMapper() {
 			return new ModelMapper();
 		}
+
+		@Bean
+		public DTOMappingService<BlogpostDTO, BlogpostMongoDoc> mapping() {
+			return new DTOMappingService<>(BlogpostMongoDoc.class, BlogpostDTO.class);
+		}
 	}
 
 	@Autowired
-	private BlogpostServicePersist testee;
+	private CreatePostAdapter create;
+	@Autowired
+	private FindPostsAdapter find;
+	@Autowired
+	private DeletePostAdapter delete;
 
 	@MockBean
 	private BlogpostRepository repo;
-	
+
 	private Class<BlogpostMongoDoc> entityClass = BlogpostMongoDoc.class;
 	private String testId1 = "save 01 ID";
 	private BlogpostMongoDoc postMongoDOc = (BlogpostMongoDoc) initialize(
@@ -58,36 +81,21 @@ class BlogpostServicePersistTest {
 	@Test
 	void whenSaved_thenReturnsTheSavedBlogpost() {
 		when(repo.save(any(entityClass))).thenReturn(just(postMongoDOc));
-		create(testee.save(postDTO)).expectNextMatches(this::matchPost).expectComplete().verify();
+		create(create.save(postDTO)).expectNextMatches(this::matchPost).expectComplete().verify();
 		verify(repo).save(any(entityClass));
-	}
-
-	@Test
-	void whenStreamAsked_thenReturnsFluxOfAllPosts() {
-		when(repo.findAll()).thenReturn(Flux.just(postMongoDOc, postMongoDOc));
-		create(testee.getAll()).expectNextMatches(this::matchPost).expectNextMatches(this::matchPost).expectComplete()
-				.verify();
-		verify(repo).findAll();
-	}
-
-	@Test
-	void whenDeleteByPostObject_thenReturnesDeletedPost() {
-		when(repo.delete(eq(postMongoDOc))).thenReturn(Mono.empty().then());
-		create(testee.delete(postDTO)).expectNextMatches(this::matchPost).expectComplete().verify();
-		verify(repo).delete(eq(postMongoDOc));
 	}
 
 	@Test
 	void whenDeleteByID_thenReturnesNothing() {
 		when(repo.deleteById(eq(testId1))).thenReturn(Mono.empty().then());
-		create(testee.delete(testId1)).expectComplete().verify();
+		create(delete.delete(testId1)).expectComplete().verify();
 		verify(repo).deleteById(eq(testId1));
 	}
 
 	@Test
 	void whenGetByID_thenRetursTheBlogpostObject() {
 		when(repo.findById(eq(testId1))).thenReturn(just(postMongoDOc));
-		create(testee.getByID(testId1)).expectNextMatches(this::matchPost).expectComplete().verify();
+		create(find.getByID(testId1)).expectNextMatches(this::matchPost).expectComplete().verify();
 		verify(repo).findById(testId1);
 		verify(repo).findById(eq(testId1));
 	}

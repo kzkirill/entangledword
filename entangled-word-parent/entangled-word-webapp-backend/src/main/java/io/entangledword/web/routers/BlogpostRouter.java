@@ -1,6 +1,5 @@
 package io.entangledword.web.routers;
 
-import static io.entangledword.web.controllers.BlogpostHandler.URI_ALL;
 import static io.entangledword.web.controllers.BlogpostHandler.URI_BASE;
 import static io.entangledword.web.controllers.BlogpostHandler.URI_ID;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -33,8 +32,7 @@ public class BlogpostRouter {
 				.andRoute(GET(URI_BASE).and(accept(TEXT_EVENT_STREAM)), controller::getStream)
 				.andRoute(GET(URI_BASE + "/{" + URI_ID + "}").and(accept(APPLICATION_JSON)), controller::get)
 				.andRoute(PUT(URI_BASE + "/{" + URI_ID + "}").and(accept(APPLICATION_JSON)), controller::put)
-				.andRoute(DELETE(URI_BASE + "/{" + URI_ID + "}"), controller::delete)
-				.andRoute(GET(URI_BASE + URI_ALL).and(accept(APPLICATION_JSON)), controller::getAll);
+				.andRoute(DELETE(URI_BASE + "/{" + URI_ID + "}"), controller::delete);
 	}
 
 	@Bean

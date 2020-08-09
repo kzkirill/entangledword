@@ -14,8 +14,10 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import org.springframework.web.reactive.function.server.ServerResponse.BodyBuilder;
 
-import io.entangledword.model.post.BlogpostDTO;
-import io.entangledword.services.BlogpostService;
+import io.entangledword.domain.post.BlogpostDTO;
+import io.entangledword.port.in.CreatePostUseCase;
+import io.entangledword.port.in.DeletePostUseCase;
+import io.entangledword.port.in.FindPostsUseCase;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -23,30 +25,28 @@ public class BlogpostHandler implements RESTHandler {
 
 	public static final String URI_ID = "ID";
 	public static final String URI_BASE = "/blogpost";
-	public static final String URI_ALL = "all";
-	private BlogpostService blogpostService;
+	private CreatePostUseCase createUC;
+	private DeletePostUseCase deleteUC;
+	private FindPostsUseCase findPostsUC;
 
-	public BlogpostHandler(BlogpostService blogpostService) {
+	public BlogpostHandler(DeletePostUseCase deletePost, CreatePostUseCase createPost) {
 		super();
-		this.blogpostService = blogpostService;
+		this.createUC = createPost;
+		this.deleteUC = deletePost;
 	}
 
 	@Override
 	public Mono<ServerResponse> get(ServerRequest serverRequest) {
-		Mono<BlogpostDTO> found = blogpostService.getByID(serverRequest.pathVariable(URI_ID));
-		return found.flatMap((BlogpostDTO post) -> okWithJason().body(fromPublisher(Mono.just(post), BlogpostDTO.class)))
+		Mono<BlogpostDTO> found = findPostsUC.getByID(serverRequest.pathVariable(URI_ID));
+		return found
+				.flatMap((BlogpostDTO post) -> okWithJason().body(fromPublisher(Mono.just(post), BlogpostDTO.class)))
 				.switchIfEmpty(notFound().build());
 	}
 
 	@Override
-	public Mono<ServerResponse> getAll(ServerRequest serverRequest) {
-		return okWithJason().body(fromPublisher(blogpostService.getAll(), BlogpostDTO.class));
-	}
-
-	@Override
 	public Mono<ServerResponse> post(ServerRequest requestWithBlogpost) {
-		final Mono<BlogpostDTO> blogpost = getObject(requestWithBlogpost).flatMap(blogpostService::save);
-		
+		final Mono<BlogpostDTO> blogpost = getObject(requestWithBlogpost).flatMap(createUC::save);
+
 		return blogpost
 				.flatMap(saved -> created(fromUriString(URI_BASE + "/" + saved.getID()).build().toUri())
 						.contentType(APPLICATION_JSON).body(fromPublisher(blogpost, BlogpostDTO.class)))
@@ -55,15 +55,14 @@ public class BlogpostHandler implements RESTHandler {
 
 	@Override
 	public Mono<ServerResponse> put(ServerRequest serverRequest) {
-		return okWithJason()
-				.body(fromPublisher(getObject(serverRequest).flatMap(blogpostService::save), BlogpostDTO.class))
+		return okWithJason().body(fromPublisher(getObject(serverRequest).flatMap(createUC::save), BlogpostDTO.class))
 				.switchIfEmpty(notFound().build());
 	}
 
 	@Override
 	public Mono<ServerResponse> delete(ServerRequest serverRequest) {
 		String ID = serverRequest.pathVariable(URI_ID);
-		return blogpostService.getByID(ID).flatMap(p -> blogpostService.delete(p)).flatMap(p -> noContent().build())
+		return findPostsUC.getByID(ID).flatMap(p -> deleteUC.delete(ID)).flatMap(p -> noContent().build())
 				.switchIfEmpty(notFound().build());
 	}
 
@@ -77,7 +76,7 @@ public class BlogpostHandler implements RESTHandler {
 
 	@Override
 	public Mono<ServerResponse> getStream(ServerRequest serverRequest) {
-		return ok().contentType(TEXT_EVENT_STREAM).body(blogpostService.getStream(), BlogpostDTO.class);
+		return ok().contentType(TEXT_EVENT_STREAM).body(findPostsUC.getStream(), BlogpostDTO.class);
 	}
 
 }
