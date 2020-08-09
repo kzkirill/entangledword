@@ -9,6 +9,7 @@ import static org.springframework.web.reactive.function.server.ServerResponse.no
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -25,8 +26,11 @@ public class BlogpostHandler implements RESTHandler {
 
 	public static final String URI_ID = "ID";
 	public static final String URI_BASE = "/blogpost";
+	@Autowired
 	private CreatePostUseCase createUC;
+	@Autowired
 	private DeletePostUseCase deleteUC;
+	@Autowired
 	private FindPostsUseCase findPostsUC;
 
 	public BlogpostHandler(DeletePostUseCase deletePost, CreatePostUseCase createPost) {
