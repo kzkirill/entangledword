@@ -3,12 +3,12 @@ package io.entangledword.services;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public abstract class DTOMappingService<DTOType,EntityType> {
+public class DTOMappingService<T,R> {
 
-	private Class<EntityType> entityType;
-	private Class<DTOType> dtoType;
+	private Class<R> entityType;
+	private Class<T> dtoType;
 	
-	public DTOMappingService(Class<EntityType> entityType, Class<DTOType> dtoType) {
+	public DTOMappingService(Class<R> entityType, Class<T> dtoType) {
 		super();
 		this.entityType = entityType;
 		this.dtoType = dtoType;
@@ -17,11 +17,11 @@ public abstract class DTOMappingService<DTOType,EntityType> {
 	@Autowired
 	private ModelMapper mapper;
 	
-	protected EntityType toEntity(DTOType dto) {
+	protected R toEntity(T dto) {
 		return mapper.map(dto, entityType);
 	}
 
-	protected DTOType toDTO(EntityType entity) {
+	protected T toDTO(R entity) {
 		return mapper.map(entity, dtoType);
 	}
 

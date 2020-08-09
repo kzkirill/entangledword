@@ -14,41 +14,39 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
-public class BlogpostServicePersist extends DTOMappingService<BlogpostDTO, BlogpostMongoDoc> implements BlogpostService {
+public class BlogpostServicePersist implements BlogpostService {
 	
 	private static final int DELAY_PER_ITEM_MS = 100;
 
 	@Autowired
 	private BlogpostRepository repo;
-
-	public BlogpostServicePersist() {
-		super(BlogpostMongoDoc.class, BlogpostDTO.class);
-	}
+	@Autowired
+	private DTOMappingService<BlogpostDTO, BlogpostMongoDoc> mapping;
 
 	@Override
 	public Mono<BlogpostDTO> save(BlogpostDTO newPost) {
-		return repo.save(toEntity(newPost)).map(this::toDTO);
+		return repo.save(mapping.toEntity(newPost)).map(mapping::toDTO);
 	}
 
 	@Override
 	public Mono<BlogpostDTO> delete(BlogpostDTO dtoToDelete) {
-		repo.delete(toEntity(dtoToDelete));
+		repo.delete(mapping.toEntity(dtoToDelete));
 		return  just(dtoToDelete);
 	}
 
 	@Override
 	public Flux<BlogpostDTO> getAll() {
-		return repo.findAll().delayElements(Duration.ofMillis(DELAY_PER_ITEM_MS)).map(this::toDTO);
+		return repo.findAll().delayElements(Duration.ofMillis(DELAY_PER_ITEM_MS)).map(mapping::toDTO);
 	}
 
 	@Override
 	public Mono<BlogpostDTO> getByID(String id) {
-		return repo.findById(id).map(this::toDTO);
+		return repo.findById(id).map(mapping::toDTO);
 	}
 
 	@Override
 	public Flux<BlogpostDTO> getStream() {
-		return repo.findAll().delayElements(Duration.ofMillis(DELAY_PER_ITEM_MS)).map(this::toDTO);
+		return repo.findAll().delayElements(Duration.ofMillis(DELAY_PER_ITEM_MS)).map(mapping::toDTO);
 	}
 	
 	@Override
