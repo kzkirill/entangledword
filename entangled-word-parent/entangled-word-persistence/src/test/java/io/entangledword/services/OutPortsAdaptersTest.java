@@ -21,9 +21,14 @@ import org.springframework.context.annotation.Bean;
 
 import io.entangledword.domain.post.Blogpost;
 import io.entangledword.domain.post.BlogpostDTO;
+import io.entangledword.domain.tag.Tag;
 import io.entangledword.persist.entity.BlogpostMongoDoc;
+import io.entangledword.persist.entity.TagMongoDoc;
 import io.entangledword.persist.repos.BlogpostRepository;
+import io.entangledword.persist.repos.TagRepository;
 import io.entangledword.port.out.CreatePostAdapter;
+import io.entangledword.port.out.CreateTagPort;
+import io.entangledword.port.out.CreateTagPortAdapter;
 import io.entangledword.port.out.DTOMappingService;
 import io.entangledword.port.out.DeletePostAdapter;
 import io.entangledword.port.out.FindPostsAdapter;
@@ -35,6 +40,13 @@ class OutPortsAdaptersTest {
 
 	@TestConfiguration
 	static class OutPortsAdaptersTestConfiguration {
+		@MockBean
+		private TagRepository tagRepo;
+
+		@Bean
+		public CreateTagPort findTagPort() {
+			return new CreateTagPortAdapter(tagRepo,new DTOMappingService<>(TagMongoDoc.class, Tag.class));
+		}
 		@Bean
 		public FindPostsPort findPostsPort() {
 			return new FindPostsAdapter();

@@ -15,18 +15,22 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import io.entangledword.domain.post.BlogTextEntry;
-import io.entangledword.persist.entity.BlogpostMongoDoc;
-import io.entangledword.persist.repos.BlogpostRepository;
+import io.entangledword.domain.post.BlogpostDTO;
+import io.entangledword.domain.tag.Tag;
+import io.entangledword.port.out.CreatePostPort;
+import io.entangledword.port.out.CreateTagPort;
 
 @Component
 public class BlogpostDataloader implements ApplicationRunner {
 
-	private final BlogpostRepository repo;
+	private final CreateTagPort createTagPort;
+	private final CreatePostPort createPostPort;
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	public BlogpostDataloader(BlogpostRepository repo) {
+	public BlogpostDataloader(CreateTagPort createTagPort, CreatePostPort createPost) {
 		super();
-		this.repo = repo;
+		this.createTagPort = createTagPort;
+		this.createPostPort = createPost;
 		logger.info("{} instance was created.", this.getClass().getName());
 	}
 
@@ -34,31 +38,26 @@ public class BlogpostDataloader implements ApplicationRunner {
 	public void run(ApplicationArguments args) throws Exception {
 		logger.info("{} is running.", this.getClass().getName());
 
-		if (repoCount() == 0) {
-			IntStream.range(0, 5).forEach(index -> {
-				logger.info("Creating from index {}", index);
-				repo.save(instanceFromIndex(index)).block();
-			});
-
-			logger.info("{} blogpost records created.", repoCount());
-		}
-
+		IntStream.range(0, 5).forEach(index -> {
+			logger.info("Creating from index {}", index);
+			this.createPostPort.save(instanceDTOFromIndex(index)).block();
+		});
+		logger.info("blogpost records created.");
+		this.createTagPort.save(Tag.newInstance("tag from loader by port save 01")).block();
+		this.createTagPort.save(Tag.newInstance("tag from loader by port save 01")).block();
+		this.createTagPort.save(Tag.newInstance("tag from loader by port save 02")).block();
+		logger.info("tag records created.");
 	}
 
-	private BlogpostMongoDoc instanceFromIndex(int index) {
+	private BlogpostDTO instanceDTOFromIndex(int index) {
 		String title = format("Title N%d", index);
-		BlogpostMongoDoc newInstance = BlogpostMongoDoc.newInstance(title, format("From loader N%d", index),
+		BlogpostDTO newInstance = BlogpostDTO.newInstance(title, format("From loader N%d", index),
 				"Author from loader");
 		List<BlogTextEntry> replies = Arrays
 				.asList(BlogTextEntry.newInstance("Reply to " + title, "Comment 1", "Commenter 1"));
 		newInstance.setReplies(replies);
-		Set<String> tags = new HashSet<String>(Arrays.asList("tag1", "tag2"));
+		Set<String> tags = new HashSet<String>(Arrays.asList("tag1_1", "tag2_1"));
 		newInstance.setTags(tags);
 		return newInstance;
 	}
-
-	private Long repoCount() {
-		return repo.findAll().count().block();
-	}
-
 }

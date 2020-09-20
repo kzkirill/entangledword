@@ -19,8 +19,11 @@ public class BlogpostDTO extends Blogpost {
 		return newInstance;
 	}
 	
+	public static BlogpostDTO newInstance(String title, String text, String author) {
+		BlogpostDTO newInstance = new BlogpostDTO(title, text, author);
+		return newInstance;
+	}
 	
-
 	protected BlogpostDTO(String title, String text, String author) {
 		super(title,text,author);
 	}
