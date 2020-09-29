@@ -1,5 +1,7 @@
 package io.entangledword.services;
 
+import java.util.Set;
+
 import org.springframework.stereotype.Service;
 
 import io.entangledword.domain.post.BlogpostDTO;
@@ -23,6 +25,11 @@ public class FindPostsService implements FindPostsUseCase {
 	@Override
 	public Flux<BlogpostDTO> getStream() {
 		return findPosts.getStream();
+	}
+
+	@Override
+	public Flux<BlogpostDTO> getByTagsList(Set<String> tagsValues) {
+		return findPosts.getByTagsList(tagsValues);
 	}
 
 }

@@ -12,5 +12,6 @@ public interface RESTHandler {
 	public Mono<ServerResponse> post(ServerRequest serverRequest);
 	public Mono<ServerResponse> put(ServerRequest serverRequest);
 	public Mono<ServerResponse> delete(ServerRequest serverRequest);
+	public Mono<ServerResponse> getPostsByQueryParams(ServerRequest serverRequest);
 
 }

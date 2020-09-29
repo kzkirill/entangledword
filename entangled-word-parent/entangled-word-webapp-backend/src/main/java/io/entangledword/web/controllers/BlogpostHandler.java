@@ -9,6 +9,9 @@ import static org.springframework.web.reactive.function.server.ServerResponse.no
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
 
+import java.util.Optional;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -19,13 +22,17 @@ import io.entangledword.domain.post.BlogpostDTO;
 import io.entangledword.port.in.CreatePostUseCase;
 import io.entangledword.port.in.DeletePostUseCase;
 import io.entangledword.port.in.FindPostsUseCase;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @Component
+@Slf4j
 public class BlogpostHandler implements RESTHandler {
 
 	public static final String URI_ID = "ID";
+	public static final String URI_TAGS = "tags";
 	public static final String URI_BASE = "/blogpost";
+	public static final String URI_SEARCH = "/search";
 	@Autowired
 	private CreatePostUseCase createUC;
 	@Autowired
@@ -81,6 +88,14 @@ public class BlogpostHandler implements RESTHandler {
 	@Override
 	public Mono<ServerResponse> getStream(ServerRequest serverRequest) {
 		return ok().contentType(TEXT_EVENT_STREAM).body(findPostsUC.getStream(), BlogpostDTO.class);
+	}
+
+	@Override
+	public Mono<ServerResponse> getPostsByQueryParams(ServerRequest serverRequest) {
+		String tagsQuery = serverRequest.queryParam(URI_TAGS)
+				.orElseThrow(() -> new IllegalArgumentException("Query parameters cannot be empty."));
+		return ok().contentType(TEXT_EVENT_STREAM).body(findPostsUC.getByTagsList(Set.of(tagsQuery.split(","))),
+				BlogpostDTO.class);
 	}
 
 }

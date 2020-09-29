@@ -1,5 +1,7 @@
 package io.entangledword.port.out;
 
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +13,7 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class FindPostsAdapter implements FindPostsPort {
-	
+
 	@Autowired
 	private BlogpostRepository repo;
 	@Autowired
@@ -25,5 +27,10 @@ public class FindPostsAdapter implements FindPostsPort {
 	@Override
 	public Flux<BlogpostDTO> getStream() {
 		return repo.findAll().map(mapping::toDTO);
+	}
+
+	@Override
+	public Flux<BlogpostDTO> getByTagsList(Set<String> tagsValues) {
+		return repo.findByTagsContaining(tagsValues).map(mapping::toDTO);
 	}
 }

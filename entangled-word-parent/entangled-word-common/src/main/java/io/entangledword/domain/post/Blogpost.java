@@ -10,10 +10,15 @@ import lombok.Setter;
 @Setter
 @Getter
 public class Blogpost extends BlogTextEntry {
-	protected Set<String> tags;
+	protected Set<String> tags = Set.of();
 
 	protected Blogpost(String title, String text, String author) {
 		super(title, text, author);
+	}
+
+	@Override
+	public String toString() {
+		return super.toString() + "tags: [" + tags.stream().reduce((tag1, tag2) -> tag1 + "," + tag2) + "]";
 	}
 
 }

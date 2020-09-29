@@ -3,6 +3,7 @@ package io.entangledword.web.controllers;
 import static io.entangledword.domain.post.BlogpostDTO.newInstance;
 import static io.entangledword.web.controllers.BlogpostHandler.URI_BASE;
 import static io.entangledword.web.controllers.BlogpostHandler.URI_ID;
+import static io.entangledword.web.controllers.BlogpostHandler.URI_SEARCH;
 import static java.lang.String.format;
 import static java.time.Duration.ofMillis;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -15,6 +16,8 @@ import static org.springframework.web.reactive.function.server.ServerResponse.no
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 import static org.springframework.web.util.UriComponentsBuilder.fromPath;
 import static reactor.core.publisher.Mono.just;
+
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -96,6 +99,18 @@ class BlogPostRouterTest {
 
 	}
 
+	@Test
+	void whenGetWithQueryParamTags_thenCallsCorrectHandler() {
+		FluxExchangeResult<BlogpostDTO> result = this.testClient.get()
+				.uri(uriBuillder -> uriBuillder.path(URI_SEARCH).queryParam("tags", "tag1,tag2").build())
+				.accept(APPLICATION_JSON).exchange().expectStatus().isOk().expectHeader()
+				.contentTypeCompatibleWith(TEXT_EVENT_STREAM).returnResult(BlogpostDTO.class);
+
+		StepVerifier.create(result.getResponseBody()).expectNextCount(4)
+				.consumeNextWith(blogpost -> assertThat(blogpost.getText()).endsWith("4")).thenCancel().verify();
+
+	}
+
 	protected BlogpostDTO objectForGetTest() {
 		return newInstance("Get request testee", "getrequesttestee111", testAuthor, testAuthor);
 	}
@@ -154,6 +169,13 @@ class BlogPostRouterTest {
 			BlogpostDTO result = newInstance(format("ID%d", index), format("Streamed N%d", index),
 					format("Streamed text N%d", index), testAuthor);
 			return result;
+		}
+
+		@Override
+		public Mono<ServerResponse> getPostsByQueryParams(ServerRequest serverRequest) {
+			return ok().contentType(TEXT_EVENT_STREAM).body(
+					Flux.interval(ofMillis(10)).take(5).onBackpressureBuffer(5).map(this::fromIndexForStream),
+					BlogpostDTO.class);
 		}
 
 	}

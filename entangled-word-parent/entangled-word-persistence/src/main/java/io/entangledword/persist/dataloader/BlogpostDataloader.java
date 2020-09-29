@@ -1,11 +1,11 @@
 package io.entangledword.persist.dataloader;
 
 import static java.lang.String.format;
+import static java.util.stream.IntStream.range;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
@@ -56,8 +56,10 @@ public class BlogpostDataloader implements ApplicationRunner {
 		List<BlogTextEntry> replies = Arrays
 				.asList(BlogTextEntry.newInstance("Reply to " + title, "Comment 1", "Commenter 1"));
 		newInstance.setReplies(replies);
-		Set<String> tags = new HashSet<String>(Arrays.asList("tag1_1", "tag2_1"));
-		newInstance.setTags(tags);
+		newInstance.setTags(range(0, index)
+							.collect(() -> new HashSet<String>(),
+									(t, value) -> t.add(format("Tag2_%s", value)),
+									(t, u) -> t.addAll(u)));
 		return newInstance;
 	}
 }
