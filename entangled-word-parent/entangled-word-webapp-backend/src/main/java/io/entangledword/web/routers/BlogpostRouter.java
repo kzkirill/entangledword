@@ -2,7 +2,6 @@ package io.entangledword.web.routers;
 
 import static io.entangledword.web.controllers.BlogpostHandler.URI_BASE;
 import static io.entangledword.web.controllers.BlogpostHandler.URI_ID;
-import static io.entangledword.web.controllers.BlogpostHandler.URI_TAGS;
 import static io.entangledword.web.controllers.BlogpostHandler.URI_SEARCH;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.TEXT_EVENT_STREAM;
@@ -19,9 +18,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
-import org.springframework.web.reactive.function.server.RequestPredicate;
 import org.springframework.web.reactive.function.server.RouterFunction;
-import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
 import io.entangledword.web.controllers.RESTHandler;
