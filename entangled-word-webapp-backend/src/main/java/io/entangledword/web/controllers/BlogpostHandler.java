@@ -9,7 +9,8 @@ import static org.springframework.web.reactive.function.server.ServerResponse.no
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
 
-import java.util.Set;
+import java.util.Arrays;
+import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -93,8 +94,8 @@ public class BlogpostHandler implements RESTHandler {
 	public Mono<ServerResponse> getPostsByQueryParams(ServerRequest serverRequest) {
 		String tagsQuery = serverRequest.queryParam(URI_TAGS)
 				.orElseThrow(() -> new IllegalArgumentException("Query parameters cannot be empty."));
-		return ok().contentType(TEXT_EVENT_STREAM).body(findPostsUC.getByTagsList(Set.of(tagsQuery.split(","))),
-				BlogpostDTO.class);
+		return ok().contentType(TEXT_EVENT_STREAM).body(
+				findPostsUC.getByTagsList(new HashSet<String>(Arrays.asList(tagsQuery.split(",")))), BlogpostDTO.class);
 	}
 
 }
