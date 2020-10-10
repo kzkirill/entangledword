@@ -1,6 +1,5 @@
 FROM openjdk:8
-VOLUME /tmp
-WORKDIR /usr/apps/entangled-word-app
-ADD target/entangled-word-webapp-backend-0.0.1-SNAPSHOT.jar entangled-word-app.jar
+COPY build/libs/entangled-word-webapp-backend-0.0.1-SNAPSHOT.jar /bin
+VOLUME /bin
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","entangled-word-app.jar"]
+ENTRYPOINT ["java","-jar","./bin/entangled-word-app.jar"]
