@@ -1,0 +1,178 @@
+{
+    "results": [
+        {
+            "gender": "female",
+            "name": {
+                "title": "Mrs",
+                "first": "Roseneide",
+                "last": "Porto"
+            },
+            "location": {
+                "street": {
+                    "number": 6268,
+                    "name": "Rua São Pedro "
+                },
+                "city": "Valinhos",
+                "state": "Alagoas",
+                "country": "Brazil",
+                "postcode": 23633,
+                "coordinates": {
+                    "latitude": "-69.5352",
+                    "longitude": "98.4174"
+                },
+                "timezone": {
+                    "offset": "-3:30",
+                    "description": "Newfoundland"
+                }
+            },
+            "email": "roseneide.porto@example.com",
+            "login": {
+                "uuid": "dca4adf1-2645-40ce-9968-d1877159a4a8",
+                "username": "orangesnake199",
+                "password": "girlies",
+                "salt": "AswaV7KM",
+                "md5": "96e380a8dbf89134cf0896cb0961e07a",
+                "sha1": "53910843be946560c52601f3e5af6811a7e58fd1",
+                "sha256": "291b95eaf38de11364b2a5bd0119fb576878a38b705e22b6764201cd7c7a7d4d"
+            },
+            "dob": {
+                "date": "1972-07-26T19:51:21.596Z",
+                "age": 48
+            },
+            "registered": {
+                "date": "2010-01-19T07:58:07.521Z",
+                "age": 10
+            },
+            "phone": "(03) 6626-5365",
+            "cell": "(28) 8044-5364",
+            "id": {
+                "name": "",
+                "value": null
+            },
+            "picture": {
+                "large": "https://randomuser.me/api/portraits/women/47.jpg",
+                "medium": "https://randomuser.me/api/portraits/med/women/47.jpg",
+                "thumbnail": "https://randomuser.me/api/portraits/thumb/women/47.jpg"
+            },
+            "nat": "BR"
+        },
+        {
+            "gender": "female",
+            "name": {
+                "title": "Mrs",
+                "first": "Rebecca",
+                "last": "Skaug"
+            },
+            "location": {
+                "street": {
+                    "number": 7205,
+                    "name": "Smedstusvingen"
+                },
+                "city": "Sand",
+                "state": "Aust-Agder",
+                "country": "Norway",
+                "postcode": "8209",
+                "coordinates": {
+                    "latitude": "-28.1416",
+                    "longitude": "53.0464"
+                },
+                "timezone": {
+                    "offset": "-3:30",
+                    "description": "Newfoundland"
+                }
+            },
+            "email": "rebecca.skaug@example.com",
+            "login": {
+                "uuid": "83ed1778-6a7d-4bcc-95bc-a115309e4737",
+                "username": "blackmeercat753",
+                "password": "ilikeit",
+                "salt": "vmdM3tDl",
+                "md5": "31bd0f1d36217335e3e3b45e205c1246",
+                "sha1": "3ce931ed798259db7aa4fc891e881010e06ede6a",
+                "sha256": "a9fbd22e93a897749abdc6b556eef69d8b05c3efd4542c2a0f347b8276e62901"
+            },
+            "dob": {
+                "date": "1962-01-11T19:44:48.345Z",
+                "age": 58
+            },
+            "registered": {
+                "date": "2014-03-17T03:35:07.078Z",
+                "age": 6
+            },
+            "phone": "39768404",
+            "cell": "43406211",
+            "id": {
+                "name": "FN",
+                "value": "11016204295"
+            },
+            "picture": {
+                "large": "https://randomuser.me/api/portraits/women/82.jpg",
+                "medium": "https://randomuser.me/api/portraits/med/women/82.jpg",
+                "thumbnail": "https://randomuser.me/api/portraits/thumb/women/82.jpg"
+            },
+            "nat": "NO"
+        },
+        {
+            "gender": "male",
+            "name": {
+                "title": "Mr",
+                "first": "Felicíssimo",
+                "last": "Jesus"
+            },
+            "location": {
+                "street": {
+                    "number": 4699,
+                    "name": "Rua Amazonas "
+                },
+                "city": "São Caetano do Sul",
+                "state": "Rondônia",
+                "country": "Brazil",
+                "postcode": 30664,
+                "coordinates": {
+                    "latitude": "-64.1966",
+                    "longitude": "28.8745"
+                },
+                "timezone": {
+                    "offset": "+4:00",
+                    "description": "Abu Dhabi, Muscat, Baku, Tbilisi"
+                }
+            },
+            "email": "felicissimo.jesus@example.com",
+            "login": {
+                "uuid": "b5ad4eba-d706-4157-8a32-1ed1468a71dc",
+                "username": "beautifulpeacock124",
+                "password": "fredrick",
+                "salt": "yg7PaIN3",
+                "md5": "acd3060c21876f6108ca2a4f00327215",
+                "sha1": "c59a7d052e5afdb0d59b4101c4b35fa0222466f8",
+                "sha256": "d46889145b8c444a8f5da0a53d5555076e20c1456fc7c55cfad839a23cfa9512"
+            },
+            "dob": {
+                "date": "1956-03-20T23:26:21.801Z",
+                "age": 64
+            },
+            "registered": {
+                "date": "2006-02-14T11:38:13.845Z",
+                "age": 14
+            },
+            "phone": "(69) 9160-7261",
+            "cell": "(41) 4218-3273",
+            "id": {
+                "name": "",
+                "value": null
+            },
+            "picture": {
+                "large": "https://randomuser.me/api/portraits/men/43.jpg",
+                "medium": "https://randomuser.me/api/portraits/med/men/43.jpg",
+                "thumbnail": "https://randomuser.me/api/portraits/thumb/men/43.jpg"
+            },
+            "nat": "BR"
+        }
+    ],
+    "info": {
+        "seed": "636913b657c1d4f6",
+        "results": 3,
+        "page": 1,
+        "version": "1.3"
+    }
+}

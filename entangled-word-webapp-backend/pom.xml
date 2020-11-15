@@ -51,7 +51,7 @@
 							<outputDirectory>${project.build.directory}/classes/resources/static/</outputDirectory>
 							<resources>
 								<resource>
-									<directory>${project.parent.basedir}/entangled-word-webapp-frontend/target/classes/static/</directory>
+									<directory>${project.parent.basedir}/entangled-word-webapp-frontend/build/</directory>
 								</resource>
 							</resources>
 						</configuration>
