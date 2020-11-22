@@ -1,4 +1,4 @@
-package io.entangledword.port.in.blogpost;
+package io.entangledword.port.in;
 
 import java.util.Set;
 

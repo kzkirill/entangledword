@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getEventsSource } from './events-source';
 import { rootUrl } from './props';
 import { getUser } from './users';
 
@@ -14,26 +15,8 @@ function byUdatedDesc(post1, post2) {
     return 0;
 }
 
-export default function getBlogpostAll() {
-    const url = rootUrl + endPoint;
-    const result = axios.get(url, {
-                                headers: {
-                                    'Content-Type': 'text/event-stream'
-                                }
-                            })
-        .then((result) => {
-            const allPosts = result.data;
-            allPosts.sort(byUdatedDesc);
-            return allPosts.map(blogpost => {
-                return getUser(blogpost.userID).then(userResult => {
-                    const user = userResult.data;
-                    blogpost.userFullname = `${user.name.title} ${user.name.first} ${user.name.last}`;
-                    blogpost.userPicture = user.pictureURL;
-                    return blogpost;
-                });
-            })
-        });
-    return result.then(array => Promise.all(array));
+export default function getBlogpostAll(blogpostReceived) {
+    getEventsSource(rootUrl + endPoint, blogpostReceived);
 }
 
 export function getBlogpost(ID) {

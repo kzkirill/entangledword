@@ -16,7 +16,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import org.springframework.web.reactive.function.server.ServerResponse.BodyBuilder;
 
 import io.entangledword.port.in.DeleteByIDUseCase;
-import io.entangledword.port.in.blogpost.FindUseCase;
+import io.entangledword.port.in.FindUseCase;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;

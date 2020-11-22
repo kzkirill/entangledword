@@ -1,8 +1,8 @@
 package io.entangledword.port.in.user;
 
-import io.entangledword.domain.user.User;
+import io.entangledword.domain.user.UserDTO;
 import reactor.core.publisher.Mono;
 
 public interface CreateUserUseCase {
-	public Mono<User> save(User user);
+	public Mono<UserDTO> save(UserDTO user);
 }

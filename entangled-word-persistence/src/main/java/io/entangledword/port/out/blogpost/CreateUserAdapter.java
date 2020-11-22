@@ -3,7 +3,7 @@ package io.entangledword.port.out.blogpost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import io.entangledword.domain.user.User;
+import io.entangledword.domain.user.UserDTO;
 import io.entangledword.persist.entity.UserMongoDoc;
 import io.entangledword.persist.repos.UserRepository;
 import io.entangledword.port.out.DTOMappingService;
@@ -16,10 +16,10 @@ public class CreateUserAdapter implements CreateUserPort {
 	@Autowired
 	private UserRepository repo;
 	@Autowired
-	private DTOMappingService<User, UserMongoDoc> mapping;
+	private DTOMappingService<UserDTO, UserMongoDoc> mapping;
 
 	@Override
-	public Mono<User> save(User user) {
+	public Mono<UserDTO> save(UserDTO user) {
 		return repo.save(mapping.toEntity(user)).map(mapping::toDTO);
 	}
 

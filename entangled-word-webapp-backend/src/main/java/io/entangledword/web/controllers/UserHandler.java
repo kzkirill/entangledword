@@ -8,26 +8,26 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
-import io.entangledword.domain.user.User;
+import io.entangledword.domain.user.UserDTO;
 import io.entangledword.port.in.DeleteByIDUseCase;
-import io.entangledword.port.in.blogpost.FindUseCase;
+import io.entangledword.port.in.FindUseCase;
 import io.entangledword.port.in.user.CreateUserUseCase;
 import reactor.core.publisher.Mono;
 
 @Component
-public class UserHandler extends ReactiveRestHandlerAdapter<User>{
+public class UserHandler extends ReactiveRestHandlerAdapter<UserDTO>{
 
 	public static final String URI_BASE = "/user";
 	@Autowired
 	private CreateUserUseCase createUC;
 
-	public UserHandler(DeleteByIDUseCase deleteUC, FindUseCase<User> findUserService) {
-		super(User.class, URI_BASE, deleteUC, findUserService);
+	public UserHandler(DeleteByIDUseCase deleteUC, FindUseCase<UserDTO> findUserService) {
+		super(UserDTO.class, URI_BASE, deleteUC, findUserService);
 	}
 
 	@Override
 	public Mono<ServerResponse> post(ServerRequest requestWithBlogpost) {
-		Function<User, String> getID = (User dto) -> dto.getID();
+		Function<UserDTO, String> getID = (UserDTO dto) -> dto.getId();
 		return super.post(requestWithBlogpost, this.createUC::save, getID);
 	}
 

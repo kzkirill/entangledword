@@ -13,9 +13,12 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
 import io.entangledword.domain.post.BlogpostDTO;
+import io.entangledword.domain.post.BlogpostPreview;
 import io.entangledword.port.in.DeleteByIDUseCase;
+import io.entangledword.port.in.FindUseCase;
 import io.entangledword.port.in.blogpost.CreatePostUseCase;
-import io.entangledword.port.in.blogpost.FindUseCase;
+import io.entangledword.port.in.blogpost.FindBlogpostPreviewUseCase;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -26,11 +29,18 @@ public class BlogpostHandler extends ReactiveRestHandlerAdapter<BlogpostDTO> {
 	public static final String URI_SEARCH = "/search";
 	@Autowired
 	private CreatePostUseCase createUC;
+	private FindBlogpostPreviewUseCase findPostPreviewUC;
 
-	public BlogpostHandler(CreatePostUseCase createUC, DeleteByIDUseCase deleteUC,
-			FindUseCase<BlogpostDTO> findPostsUC) {
+	public BlogpostHandler(CreatePostUseCase createUC, DeleteByIDUseCase deleteUC, FindUseCase<BlogpostDTO> findPostsUC,
+			FindBlogpostPreviewUseCase findPostPreviewUC) {
 		super(BlogpostDTO.class, URI_BASE, deleteUC, findPostsUC);
 		this.createUC = createUC;
+		this.findPostPreviewUC = findPostPreviewUC;
+	}
+
+	@Override
+	public Mono<ServerResponse> getStream(ServerRequest serverRequest) {
+		return ok().contentType(TEXT_EVENT_STREAM).body(findPostPreviewUC.getAll(), BlogpostPreview.class);
 	}
 
 	@Override
