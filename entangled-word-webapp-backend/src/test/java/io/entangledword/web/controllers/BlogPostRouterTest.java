@@ -49,7 +49,7 @@ class BlogPostRouterTest {
 	@BeforeAll
 	public void setUp() {
 		controllerMock = new CRUDControllerMock();
-		RouterFunction<ServerResponse> routerFunction = new BlogpostRouter().routerFunction(controllerMock);
+		RouterFunction<ServerResponse> routerFunction = new BlogpostRouter().blogpostRouterFunction(controllerMock);
 		assertThat(routerFunction).isNotNull();
 		getRegustTestee = objectForGetTest();
 		testClient = WebTestClient.bindToRouterFunction(routerFunction).configureClient().baseUrl(URI_BASE).build();

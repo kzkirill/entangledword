@@ -16,8 +16,11 @@ function byUdatedDesc(post1, post2) {
 
 export default function getBlogpostAll() {
     const url = rootUrl + endPoint;
-    // const posts = axios.get(url).then();
-    const result = axios.get(url)
+    const result = axios.get(url, {
+                                headers: {
+                                    'Content-Type': 'text/event-stream'
+                                }
+                            })
         .then((result) => {
             const allPosts = result.data;
             allPosts.sort(byUdatedDesc);
@@ -25,7 +28,7 @@ export default function getBlogpostAll() {
                 return getUser(blogpost.userID).then(userResult => {
                     const user = userResult.data;
                     blogpost.userFullname = `${user.name.title} ${user.name.first} ${user.name.last}`;
-                    blogpost.userPicture = user.picture.thumbnail;
+                    blogpost.userPicture = user.pictureURL;
                     return blogpost;
                 });
             })
@@ -62,7 +65,7 @@ export function getTags() {
     const url = rootUrl + endPoint;
     return axios.get(url)
         .then(result => result.data)
-        .then(allPosts => allPosts.map(one => one.tags))
+        .then(allPosts => ['asdasd', 'asdasd'])//allPosts.map(one => one.tags))
         .then(arrayOfArrays => arrayOfArrays.flat()
-        .filter(onlyUnique));
+            .filter(onlyUnique));
 }

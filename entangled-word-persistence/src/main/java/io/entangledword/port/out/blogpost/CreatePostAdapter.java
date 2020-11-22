@@ -1,4 +1,4 @@
-package io.entangledword.port.out;
+package io.entangledword.port.out.blogpost;
 
 import static io.entangledword.domain.tag.Tag.newInstance;
 import static reactor.core.publisher.Flux.fromIterable;
@@ -10,6 +10,7 @@ import io.entangledword.domain.post.BlogpostDTO;
 import io.entangledword.domain.tag.TagInt;
 import io.entangledword.persist.entity.BlogpostMongoDoc;
 import io.entangledword.persist.repos.BlogpostRepository;
+import io.entangledword.port.out.DTOMappingService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

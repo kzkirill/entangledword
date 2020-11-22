@@ -8,17 +8,17 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import io.entangledword.domain.post.BlogpostDTO;
-import io.entangledword.services.BlogpostService;
+import io.entangledword.services.blogpost.BlogpostService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class BlogpostHandlerTest extends BlogPostRouterTest {
 
-	protected RESTHandler createHandler() {
-		return new BlogpostHandler(null,null);
-	}
-
+//	protected RESTHandler createHandler() {
+//		return new BlogpostHandler();
+//	}
+//
 	@Override
 	protected BlogpostDTO objectForGetTest() {
 		return newInstance("For get", "1", testAuthor, testAuthor);

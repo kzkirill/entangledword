@@ -1,9 +1,10 @@
-package io.entangledword.port.out;
+package io.entangledword.port.out.blogpost;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import io.entangledword.persist.repos.BlogpostRepository;
+import io.entangledword.port.out.blogpost.DeletePostPort;
 import reactor.core.publisher.Mono;
 
 @Service

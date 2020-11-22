@@ -16,12 +16,12 @@ class BloggingWordWebApplicationSmokeTest {
 	@Autowired
 	BlogpostHandler controller;
 	@Autowired
-	RouterFunction<ServerResponse> routerFunction;
+	RouterFunction<ServerResponse> blogpostRouterFunction;
 	
 	@Test
 	void contextLoads() {
 		assertThat(controller).isNotNull();
-		assertThat(routerFunction).isNotNull();
+		assertThat(blogpostRouterFunction).isNotNull();
 	}
 
 }

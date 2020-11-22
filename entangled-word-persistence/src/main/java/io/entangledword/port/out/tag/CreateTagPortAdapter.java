@@ -1,4 +1,4 @@
-package io.entangledword.port.out;
+package io.entangledword.port.out.tag;
 
 import org.springframework.stereotype.Service;
 
@@ -6,6 +6,8 @@ import io.entangledword.domain.tag.Tag;
 import io.entangledword.domain.tag.TagInt;
 import io.entangledword.persist.entity.TagMongoDoc;
 import io.entangledword.persist.repos.TagRepository;
+import io.entangledword.port.out.DTOMappingService;
+import io.entangledword.port.out.blogpost.CreateTagPort;
 import lombok.Data;
 import reactor.core.publisher.Mono;
 

@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @JsonFormat
-public class BlogpostDTO extends Blogpost {
+public class BlogpostDTO extends Blogpost{
 	private String ID;
 
 	public static BlogpostDTO newInstance(String id, String title, String text, String author) {

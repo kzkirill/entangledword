@@ -17,8 +17,8 @@ import org.springframework.stereotype.Component;
 import io.entangledword.domain.post.BlogTextEntry;
 import io.entangledword.domain.post.BlogpostDTO;
 import io.entangledword.domain.tag.Tag;
-import io.entangledword.port.out.CreatePostPort;
-import io.entangledword.port.out.CreateTagPort;
+import io.entangledword.port.out.blogpost.CreatePostPort;
+import io.entangledword.port.out.blogpost.CreateTagPort;
 
 @Component
 public class BlogpostDataloader implements ApplicationRunner {

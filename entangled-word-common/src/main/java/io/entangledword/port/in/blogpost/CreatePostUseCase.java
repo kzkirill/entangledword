@@ -1,4 +1,4 @@
-package io.entangledword.port.in;
+package io.entangledword.port.in.blogpost;
 
 import io.entangledword.domain.post.BlogpostDTO;
 import reactor.core.publisher.Mono;

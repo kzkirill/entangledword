@@ -1,10 +1,10 @@
-package io.entangledword.services;
+package io.entangledword.services.blogpost;
 
 import org.springframework.stereotype.Service;
 
 import io.entangledword.domain.post.BlogpostDTO;
-import io.entangledword.port.in.CreatePostUseCase;
-import io.entangledword.port.out.CreatePostPort;
+import io.entangledword.port.in.blogpost.CreatePostUseCase;
+import io.entangledword.port.out.blogpost.CreatePostPort;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Mono;
 

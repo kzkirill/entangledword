@@ -10,7 +10,7 @@ class CurrentUser extends Component {
                     <div className="media">
                         <div className="media-left">
                             <figure className="image is-24x24">
-                                <img src={user.picture.large} alt="Profile" /></figure>
+                                <img src={user.pictureURL} alt="Profile" /></figure>
                         </div>
                         <div className="media-content">
                             <p className="subtitle is-6">{user.name.title} {user.name.first} {user.name.last}</p>

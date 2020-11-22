@@ -28,13 +28,13 @@ import io.entangledword.persist.entity.BlogpostMongoDoc;
 import io.entangledword.persist.entity.TagMongoDoc;
 import io.entangledword.persist.repos.BlogpostRepository;
 import io.entangledword.persist.repos.TagRepository;
-import io.entangledword.port.out.CreatePostAdapter;
-import io.entangledword.port.out.CreateTagPort;
-import io.entangledword.port.out.CreateTagPortAdapter;
 import io.entangledword.port.out.DTOMappingService;
-import io.entangledword.port.out.DeletePostAdapter;
-import io.entangledword.port.out.FindPostsAdapter;
-import io.entangledword.port.out.FindPostsPort;
+import io.entangledword.port.out.blogpost.CreatePostAdapter;
+import io.entangledword.port.out.blogpost.CreateTagPort;
+import io.entangledword.port.out.blogpost.DeletePostAdapter;
+import io.entangledword.port.out.blogpost.FindPostsAdapter;
+import io.entangledword.port.out.blogpost.FindPostsPort;
+import io.entangledword.port.out.tag.CreateTagPortAdapter;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -48,7 +48,7 @@ class OutPortsAdaptersTest {
 
 		@Bean
 		public CreateTagPort findTagPort() {
-			return new CreateTagPortAdapter(tagRepo, new DTOMappingService<>(TagMongoDoc.class, Tag.class));
+			return new CreateTagPortAdapter(tagRepo, new DTOMappingService<>(Tag.class, TagMongoDoc.class));
 		}
 
 		@Bean
@@ -73,7 +73,7 @@ class OutPortsAdaptersTest {
 
 		@Bean
 		public DTOMappingService<BlogpostDTO, BlogpostMongoDoc> mapping() {
-			return new DTOMappingService<>(BlogpostMongoDoc.class, BlogpostDTO.class);
+			return new DTOMappingService<>(BlogpostDTO.class, BlogpostMongoDoc.class);
 		}
 	}
 

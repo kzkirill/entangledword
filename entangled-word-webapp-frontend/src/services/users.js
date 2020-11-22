@@ -1,11 +1,11 @@
 import axios from 'axios';
+import { getEventsSource } from './events-source';
 import { rootUrl } from './props';
 
-const endPoint = '/user/';
+const endPoint = '/user';
 
-export default function getUserAll() {
-    const url = rootUrl + endPoint;
-    return axios.get(url);
+export default function getUserAll(userReceived) {
+    getEventsSource(rootUrl + endPoint, userReceived);
 }
 
 export function getUser(ID) {

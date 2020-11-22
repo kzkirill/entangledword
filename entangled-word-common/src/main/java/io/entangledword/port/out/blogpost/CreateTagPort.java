@@ -1,4 +1,4 @@
-package io.entangledword.port.out;
+package io.entangledword.port.out.blogpost;
 
 import io.entangledword.domain.tag.TagInt;
 import reactor.core.publisher.Mono;

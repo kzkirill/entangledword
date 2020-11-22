@@ -18,8 +18,10 @@ class UsersList extends Component {
     }
 
     componentDidMount() {
-        getUserAll().then(result => {
-            this.setState({ users: result.data });
+        getUserAll(data => {
+            this.setState(function (previous) {
+                return { users: previous.users.concat([data]) };
+            });
         });
     }
 
@@ -36,7 +38,7 @@ class UsersList extends Component {
                     <div className="media">
                         <div className="media-left">
                             <figure className="image">
-                                <img src={user.picture.large} alt="Profile" /></figure>
+                                <img src={user.pictureURL} alt="Profile" /></figure>
                         </div>
                         <div className="media-content">
                             <p className="title is-4">{user.name.title} {user.name.first} {user.name.last}</p>

@@ -1,4 +1,4 @@
-package io.entangledword.services;
+package io.entangledword.services.blogpost;
 
 import io.entangledword.domain.post.BlogpostDTO;
 import reactor.core.publisher.Flux;

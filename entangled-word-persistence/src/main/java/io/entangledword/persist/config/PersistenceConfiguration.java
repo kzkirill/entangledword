@@ -6,8 +6,10 @@ import org.springframework.context.annotation.Configuration;
 
 import io.entangledword.domain.post.BlogpostDTO;
 import io.entangledword.domain.tag.Tag;
+import io.entangledword.domain.user.User;
 import io.entangledword.persist.entity.BlogpostMongoDoc;
 import io.entangledword.persist.entity.TagMongoDoc;
+import io.entangledword.persist.entity.UserMongoDoc;
 import io.entangledword.port.out.DTOMappingService;
 
 @Configuration
@@ -20,11 +22,16 @@ public class PersistenceConfiguration {
 
 	@Bean
 	public DTOMappingService<BlogpostDTO, BlogpostMongoDoc> getBlogpostMapping() {
-		return new DTOMappingService<BlogpostDTO, BlogpostMongoDoc>(BlogpostMongoDoc.class, BlogpostDTO.class);
+		return new DTOMappingService<BlogpostDTO, BlogpostMongoDoc>(BlogpostDTO.class, BlogpostMongoDoc.class);
 	}
-	
+
 	@Bean
 	public DTOMappingService<Tag, TagMongoDoc> getTagMapping() {
-		return new DTOMappingService<Tag, TagMongoDoc>(TagMongoDoc.class, Tag.class);
+		return new DTOMappingService<Tag, TagMongoDoc>(Tag.class, TagMongoDoc.class);
+	}
+
+	@Bean
+	public DTOMappingService<User, UserMongoDoc> getUserMapping() {
+		return new DTOMappingService<User, UserMongoDoc>(User.class, UserMongoDoc.class);
 	}
 }
