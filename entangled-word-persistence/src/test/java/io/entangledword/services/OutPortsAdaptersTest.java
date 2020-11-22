@@ -32,9 +32,9 @@ import io.entangledword.port.out.DTOMappingService;
 import io.entangledword.port.out.blogpost.CreatePostAdapter;
 import io.entangledword.port.out.blogpost.CreateTagPort;
 import io.entangledword.port.out.blogpost.DeletePostAdapter;
+import io.entangledword.port.out.blogpost.FindPort;
 import io.entangledword.port.out.blogpost.FindPostsAdapter;
-import io.entangledword.port.out.blogpost.FindPostsPort;
-import io.entangledword.port.out.tag.CreateTagPortAdapter;
+import io.entangledword.port.out.tag.TagPortAdapter;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -48,11 +48,11 @@ class OutPortsAdaptersTest {
 
 		@Bean
 		public CreateTagPort findTagPort() {
-			return new CreateTagPortAdapter(tagRepo, new DTOMappingService<>(Tag.class, TagMongoDoc.class));
+			return new TagPortAdapter(tagRepo, new DTOMappingService<>(Tag.class, TagMongoDoc.class));
 		}
 
 		@Bean
-		public FindPostsPort findPostsPort() {
+		public FindPort findPostsPort() {
 			return new FindPostsAdapter();
 		}
 

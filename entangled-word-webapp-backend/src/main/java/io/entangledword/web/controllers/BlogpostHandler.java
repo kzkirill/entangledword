@@ -17,8 +17,7 @@ import io.entangledword.domain.post.BlogpostPreview;
 import io.entangledword.port.in.DeleteByIDUseCase;
 import io.entangledword.port.in.FindUseCase;
 import io.entangledword.port.in.blogpost.CreatePostUseCase;
-import io.entangledword.port.in.blogpost.FindBlogpostPreviewUseCase;
-import reactor.core.publisher.Flux;
+import io.entangledword.port.in.blogpost.FindBlogpostSpecificUseCase;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -29,18 +28,18 @@ public class BlogpostHandler extends ReactiveRestHandlerAdapter<BlogpostDTO> {
 	public static final String URI_SEARCH = "/search";
 	@Autowired
 	private CreatePostUseCase createUC;
-	private FindBlogpostPreviewUseCase findPostPreviewUC;
+	private FindBlogpostSpecificUseCase findPostUC;
 
 	public BlogpostHandler(CreatePostUseCase createUC, DeleteByIDUseCase deleteUC, FindUseCase<BlogpostDTO> findPostsUC,
-			FindBlogpostPreviewUseCase findPostPreviewUC) {
+			FindBlogpostSpecificUseCase findPostPreviewUC) {
 		super(BlogpostDTO.class, URI_BASE, deleteUC, findPostsUC);
 		this.createUC = createUC;
-		this.findPostPreviewUC = findPostPreviewUC;
+		this.findPostUC = findPostPreviewUC;
 	}
 
 	@Override
 	public Mono<ServerResponse> getStream(ServerRequest serverRequest) {
-		return ok().contentType(TEXT_EVENT_STREAM).body(findPostPreviewUC.getAll(), BlogpostPreview.class);
+		return ok().contentType(TEXT_EVENT_STREAM).body(findPostUC.getAllPreviews(), BlogpostPreview.class);
 	}
 
 	@Override
@@ -64,7 +63,7 @@ public class BlogpostHandler extends ReactiveRestHandlerAdapter<BlogpostDTO> {
 		String tagsQuery = serverRequest.queryParam(URI_TAGS)
 				.orElseThrow(() -> new IllegalArgumentException("Query parameters cannot be empty."));
 		return ok().contentType(TEXT_EVENT_STREAM).body(
-				findUseCase.getByTagsList(new HashSet<String>(Arrays.asList(tagsQuery.split(",")))), BlogpostDTO.class);
+				findPostUC.getByTagsList(new HashSet<String>(Arrays.asList(tagsQuery.split(",")))), BlogpostDTO.class);
 	}
 
 }

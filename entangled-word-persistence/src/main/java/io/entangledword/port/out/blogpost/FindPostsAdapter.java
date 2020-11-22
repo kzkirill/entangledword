@@ -9,7 +9,6 @@ import io.entangledword.domain.post.BlogpostDTO;
 import io.entangledword.persist.entity.BlogpostMongoDoc;
 import io.entangledword.persist.repos.BlogpostRepository;
 import io.entangledword.port.out.DTOMappingService;
-import io.entangledword.port.out.blogpost.FindPostsPort;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -27,7 +26,7 @@ public class FindPostsAdapter implements FindPostsPort {
 	}
 
 	@Override
-	public Flux<BlogpostDTO> getStream() {
+	public Flux<BlogpostDTO> getAll() {
 		return repo.findAll().map(mapping::toDTO);
 	}
 

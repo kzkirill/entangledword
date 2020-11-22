@@ -29,9 +29,4 @@ public class FindUserService implements FindUseCase<UserDTO> {
 		return this.findUserPort.getAll();
 	}
 
-	@Override
-	public Flux<UserDTO> getByTagsList(Set<String> tagsValues) {
-		return null;
-	}
-
 }

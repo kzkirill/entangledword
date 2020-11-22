@@ -7,7 +7,7 @@ class BPostPreview extends Component {
     }
     render() {
         const post = this.props.post;
-        const lastUpdatedStr = new Date(post.lastUpdateAt).toDateString();
+        const lastUpdatedStr = new Date(Date.parse(post.updated)).toDateString();
         const postURL = `/details/${post.id}`;
         return (
             <div className="card">

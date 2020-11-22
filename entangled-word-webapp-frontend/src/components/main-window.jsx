@@ -8,7 +8,7 @@ import CurrentUser from "./user/user-current";
 import { loginHelper } from "../global/authentication";
 import { getUser } from "../services/users";
 import { TagsList } from "./tag/tags-list";
-import { getTags } from "../services/blogpost";
+import { getTags } from "../services/tag";
 
 class MainWindow extends Component {
 
@@ -32,9 +32,9 @@ class MainWindow extends Component {
     }
 
     refreshTags() {
-        getTags().then(tags => {
-            this.setState(() => ({ tags: tags }));
-        });
+        getTags((tag) =>
+            this.setState((previous) => ({ tags: previous.tags.concat([tag.value]) }))
+        );
     }
 
     refreshCurrentUser() {
@@ -68,7 +68,7 @@ class MainWindow extends Component {
                     <div className="tile is-vertical is-parent">
                         <div className="tile is-child box" >
                             <CurrentUser user={this.state.user} />
-                            <br/>
+                            <br />
                             <TagsList tags={this.state.tags} />
                         </div>
                     </div>

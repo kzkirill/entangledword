@@ -1,7 +1,5 @@
 package io.entangledword.port.in;
 
-import java.util.Set;
-
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -10,5 +8,4 @@ public interface FindUseCase<DTOType> {
 
 	public Flux<DTOType> getStream();
 
-	public Flux<DTOType> getByTagsList(Set<String> tagsValues);
 }

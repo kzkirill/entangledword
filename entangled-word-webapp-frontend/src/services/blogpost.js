@@ -39,16 +39,3 @@ export function create(newPost) {
     const url = rootUrl + endPoint;
     return axios.post(url, newPost);
 }
-
-function onlyUnique(value, index, self) {
-    return self.indexOf(value) === index;
-}
-
-export function getTags() {
-    const url = rootUrl + endPoint;
-    return axios.get(url)
-        .then(result => result.data)
-        .then(allPosts => ['asdasd', 'asdasd'])//allPosts.map(one => one.tags))
-        .then(arrayOfArrays => arrayOfArrays.flat()
-            .filter(onlyUnique));
-}
