@@ -5,16 +5,6 @@ import { getUser } from './users';
 
 const endPoint = '/blogpost/';
 
-function byUdatedDesc(post1, post2) {
-    if (post1.lastUpdateAt < post2.lastUpdateAt) {
-        return 1;
-    }
-    if (post1.lastUpdateAt > post2.lastUpdateAt) {
-        return -1;
-    }
-    return 0;
-}
-
 export default function getBlogpostAll(blogpostReceived) {
     getEventsSource(rootUrl + endPoint, blogpostReceived);
 }
@@ -23,11 +13,11 @@ export function getBlogpost(ID) {
     const promise = axios.get(rootUrl + endPoint + ID);
     const full = promise.then(result => {
         const blogpost = result.data;
-        return getUser(blogpost.userID)
+        return getUser(blogpost.author)
             .then(userResult => {
                 const user = userResult.data;
                 blogpost.userFullname = `${user.name.title} ${user.name.first} ${user.name.last}`;
-                blogpost.userPicture = user.picture.thumbnail;
+                blogpost.userPicture = user.pictureURL;
                 return blogpost;
             });
     });

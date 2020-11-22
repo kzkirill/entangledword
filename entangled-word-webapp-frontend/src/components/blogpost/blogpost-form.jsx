@@ -34,8 +34,8 @@ class PostForm extends Component {
         const loggedID = loginHelper.getLoggedIn();
         if (postID) {
             getBlogpost(postID).then(blogpost => {
-                const mode = blogpost.userID === loggedID ? modeEdit : modeReadonly;
-                this.setState(previous => ({
+                const mode = blogpost.author === loggedID ? modeEdit : modeReadonly;
+                this.setState(() => ({
                     mode: mode,
                     title: blogpost.title,
                     text: blogpost.text,
@@ -43,7 +43,7 @@ class PostForm extends Component {
                 }));
             });
         } else {
-            this.setState(previous => ({
+            this.setState(() => ({
                 mode: modeNew,
                 title: '',
                 text: '',
