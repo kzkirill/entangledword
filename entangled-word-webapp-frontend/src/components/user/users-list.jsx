@@ -33,7 +33,7 @@ class UsersList extends Component {
 
     renderList(user) {
         return (
-            <div className="card">
+            <div key={user.id} className="card">
                 <div className="card-content">
                     <div className="media">
                         <div className="media-left">

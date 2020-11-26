@@ -1,6 +1,6 @@
 import { Redirect } from 'react-router-dom';
 import { loginHelper } from '../../global/authentication.js';
-import { create, getBlogpost } from '../../services/blogpost.js'
+import { create, getBlogpost, update } from '../../services/blogpost.js'
 import { clusterize } from '../../services/intellexer.js'
 const { Component } = require("react")
 
@@ -38,6 +38,8 @@ class PostForm extends Component {
                 this.setState(() => ({
                     mode: mode,
                     title: blogpost.title,
+                    created: blogpost.created,
+                    author: blogpost.author,
                     text: blogpost.text,
                     tags: blogpost.tags
                 }));
@@ -56,20 +58,37 @@ class PostForm extends Component {
         clusterize();//.then(response => console.log(response));
     }
 
+    nowAsString() {
+        const d = new Date();
+        const month = (d.getMonth() + 1).toString();
+        const datestring = d.getFullYear() + " " + d.getDate() + "/" + (month.length === 1 ? "0" + month : month) + " " +
+            d.getHours() + ":" + d.getMinutes();
+        return datestring;
+    }
+
     handleSubmit(event) {
         const toSave = {
             text: this.state.text,
             title: this.state.title,
-            userID: loginHelper.getLoggedIn(),
-            lastUpdateAt: Date.now(),
+            author: loginHelper.getLoggedIn(),
+            updated: this.nowAsString(),
             tags: this.state.tags
         };
-        create(toSave)
-            .then(response => {
-                this.props.refreshTags();
-                console.log(`Status : ${response.status} Created with ID : ${response.data.id}`);
-            })
-            .catch(exc => console.log(exc));
+        const onResponse = () => this.props.refreshTags();
+        if (this.state.mode === modeNew) {
+            toSave.created = this.nowAsString();
+            create(toSave)
+                .then(onResponse())
+                .catch(exc => console.log(exc));
+        };
+        if (this.state.mode === modeEdit) {
+            toSave.created = this.state.created;
+            update(toSave)
+                .then(onResponse())
+                .catch(exc => console.log(exc));
+            ;
+        };
+
         event.preventDefault();
     }
 

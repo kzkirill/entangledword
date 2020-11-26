@@ -23,6 +23,7 @@ public class FindPostsService implements FindUseCase<BlogpostDTO>, FindBlogpostS
 	private final FindPort<BlogpostDTO> findPort;
 	private final FindPostsPort findPostsPort;
 	private final FindUserPort findUsers;
+	private static UserDTO userNotFound = UserDTO.newInstance("Usr", "Not Found", "", "", "", "");
 
 	@Override
 	public Mono<BlogpostDTO> getByID(String id) {
@@ -41,8 +42,8 @@ public class FindPostsService implements FindUseCase<BlogpostDTO>, FindBlogpostS
 
 	@Override
 	public Flux<BlogpostPreview> getAllPreviews() {
-		return this.findPort.getAll()
-				.flatMap((BlogpostDTO blogpost) -> this.findUsers.getByID(blogpost.getAuthor()).map((UserDTO user) -> {
+		return this.findPort.getAll().flatMap((BlogpostDTO blogpost) -> this.findUsers.getByID(blogpost.getAuthor())
+				.defaultIfEmpty(userNotFound).map((UserDTO user) -> {
 					return new BlogpostPreview(blogpost, user.getFullName(), user.getPictureURL());
 				}));
 	}

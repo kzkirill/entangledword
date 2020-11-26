@@ -29,3 +29,8 @@ export function create(newPost) {
     const url = rootUrl + endPoint;
     return axios.post(url, newPost);
 }
+
+export function update(updatePost) {
+    const url = rootUrl + endPoint + updatePost.ID;
+    return axios.put(url, updatePost);
+}
