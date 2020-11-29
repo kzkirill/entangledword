@@ -11,6 +11,8 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 import java.util.function.Function;
 import java.util.logging.Logger;
 
+import org.springframework.http.ReactiveHttpOutputMessage;
+import org.springframework.web.reactive.function.BodyInserter;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import org.springframework.web.reactive.function.server.ServerResponse.BodyBuilder;
@@ -37,7 +39,7 @@ public abstract class ReactiveRestHandlerAdapter<DTOType> implements RESTHandler
 			return foundObject;
 		});
 
-		return found.flatMap((DTOType post) -> okWithJason().body(fromPublisher(Mono.just(post), this.dtoType)))
+		return found.flatMap((DTOType dto) -> okWithJason().body(fromPublisher(Mono.just(dto), this.dtoType)))
 				.switchIfEmpty(notFound().build());
 	}
 
@@ -50,7 +52,7 @@ public abstract class ReactiveRestHandlerAdapter<DTOType> implements RESTHandler
 		log.info("POST called on blogpost handler");
 		final Mono<DTOType> dtoMono = getObject(requestWithObject).flatMap(save::apply);
 		return dtoMono.flatMap(saved -> {
-			log.info(format("Saved dto id:%s %s", getID.apply(saved), saved));
+			log.info(format("POST: Saved dto id:%s %s", getID.apply(saved), saved));
 			return ServerResponse
 					.created(
 							UriComponentsBuilder.fromUriString(this.uriBase + "/" + getID.apply(saved)).build().toUri())
@@ -59,16 +61,26 @@ public abstract class ReactiveRestHandlerAdapter<DTOType> implements RESTHandler
 	}
 
 	protected Mono<ServerResponse> put(ServerRequest serverRequest, Function<DTOType, Mono<DTOType>> save) {
-		return okWithJason().body(fromPublisher(getObject(serverRequest).flatMap(save::apply), this.dtoType))
-				.switchIfEmpty(notFound().build());
+		String ID = serverRequest.pathVariable(URI_ID);
+		log.info("PUT: ID to update : " + ID);
+		return this.findUseCase.getByID(ID)
+				.flatMap(found -> getObject(serverRequest))
+				.flatMap(fromRequest -> save.apply(fromRequest))
+				.flatMap(saved -> okFromDto(saved, this.dtoType))
+				.switchIfEmpty(logAndCreateNotFound(ID));
+
+	}
+	
+	protected Mono<ServerResponse> okFromDto(DTOType dto , Class<DTOType> dtoType) {
+		return okWithJason().body(fromPublisher(Mono.just(dto),dtoType));
 	}
 
 	protected Mono<ServerResponse> delete(ServerRequest serverRequest, Function<String, Mono<DTOType>> getByID,
 			Function<String, Mono<Void>> deletOne) {
 		String ID = serverRequest.pathVariable(URI_ID);
-		log.info("ID to delete : " + ID);
+		log.info("DELETE: ID to delete : " + ID);
 		return getByID.apply(ID).flatMap(p -> deletOne.apply(ID)).flatMap(p -> noContent().build())
-				.switchIfEmpty(notFound().build());
+				.switchIfEmpty(logAndCreateNotFound(ID));
 	}
 
 	protected Mono<DTOType> getObject(ServerRequest requestWithObject) {
@@ -81,6 +93,11 @@ public abstract class ReactiveRestHandlerAdapter<DTOType> implements RESTHandler
 
 	protected BodyBuilder okWithJason() {
 		return ok().contentType(APPLICATION_JSON);
+	}
+
+	protected Mono<ServerResponse> logAndCreateNotFound(String ID) {
+		log.info("ID not found : " + ID);
+		return notFound().build();
 	}
 
 }

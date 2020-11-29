@@ -37,6 +37,7 @@ class PostForm extends Component {
                 const mode = blogpost.author === loggedID ? modeEdit : modeReadonly;
                 this.setState(() => ({
                     mode: mode,
+                    id: blogpost.id,
                     title: blogpost.title,
                     created: blogpost.created,
                     author: blogpost.author,
@@ -58,16 +59,21 @@ class PostForm extends Component {
         clusterize();//.then(response => console.log(response));
     }
 
+    leadingZeros(number){
+        return number <=9 ? "0" + number:number.toString();
+    }
+
     nowAsString() {
         const d = new Date();
-        const month = (d.getMonth() + 1).toString();
-        const datestring = d.getFullYear() + " " + d.getDate() + "/" + (month.length === 1 ? "0" + month : month) + " " +
-            d.getHours() + ":" + d.getMinutes();
+        const month = this.leadingZeros(d.getMonth() + 1);
+        const datestring = d.getFullYear() + " " + d.getDate() + "/" + month + " " +
+            this.leadingZeros(d.getHours()) + ":" + this.leadingZeros(d.getMinutes());
         return datestring;
     }
 
     handleSubmit(event) {
         const toSave = {
+            id: this.state.id,
             text: this.state.text,
             title: this.state.title,
             author: loginHelper.getLoggedIn(),
