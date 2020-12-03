@@ -66,7 +66,7 @@ class PostForm extends Component {
             text: this.state.text,
             title: this.state.title,
             author: loginHelper.getLoggedIn(),
-            updated: this.nowAsString(),
+            updated: nowAsString(),
             tags: this.state.tags
         };
         const onResponse = () => this.props.refreshTags();
