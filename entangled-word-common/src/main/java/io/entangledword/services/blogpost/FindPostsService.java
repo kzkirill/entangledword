@@ -1,7 +1,9 @@
 package io.entangledword.services.blogpost;
 
 import java.util.Set;
+import java.util.function.Function;
 
+import org.reactivestreams.Publisher;
 import org.springframework.stereotype.Service;
 
 import io.entangledword.domain.post.BlogpostDTO;
@@ -36,16 +38,20 @@ public class FindPostsService implements FindUseCase<BlogpostDTO>, FindBlogpostS
 	}
 
 	@Override
-	public Flux<BlogpostDTO> getByTagsList(Set<String> tagsValues) {
-		return findPostsPort.getByTagsList(tagsValues);
+	public Flux<BlogpostPreview> getByTagsList(Set<String> tagsValues) {
+		return findPostsPort.getByTagsList(tagsValues).flatMap(mapToUserData());
 	}
 
 	@Override
 	public Flux<BlogpostPreview> getAllPreviews() {
-		return this.findPort.getAll().flatMap((BlogpostDTO blogpost) -> this.findUsers.getByID(blogpost.getAuthor())
-				.defaultIfEmpty(userNotFound).map((UserDTO user) -> {
+		return this.findPort.getAll().flatMap(mapToUserData());
+	}
+
+	private Function<BlogpostDTO, ? extends Publisher<? extends BlogpostPreview>> mapToUserData() {
+		return (BlogpostDTO blogpost) -> this.findUsers.getByID(blogpost.getAuthor()).defaultIfEmpty(userNotFound)
+				.map((UserDTO user) -> {
 					return new BlogpostPreview(blogpost, user.getFullName(), user.getPictureURL());
-				}));
+				});
 	}
 
 }

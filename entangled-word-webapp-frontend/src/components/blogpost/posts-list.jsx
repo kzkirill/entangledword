@@ -4,14 +4,20 @@ import getBlogpostAll from "../../services/blogpost.js";
 const { Component } = require("react");
 
 class PostsList extends Component {
+    static defaultProps = {
+        getPostsFunction: getBlogpostAll
+    }
+
     constructor(props) {
         super(props);
         this.state = { posts: [] };
     }
+
     componentDidMount() {
-        getBlogpostAll(post => this.setState(
-            previous => ({ posts: previous.posts.concat([post]) }))
-        );
+        const onNewRecord = post => this.setState(
+            previous => ({ posts: previous.posts.concat([post]) }));
+        const queryParams = this.props.match ? this.props.match.location.search : null;
+        this.props.getPostsFunction(onNewRecord, queryParams);
     }
 
     render() {

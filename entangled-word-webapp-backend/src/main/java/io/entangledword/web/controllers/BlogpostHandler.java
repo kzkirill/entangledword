@@ -18,8 +18,10 @@ import io.entangledword.port.in.DeleteByIDUseCase;
 import io.entangledword.port.in.FindUseCase;
 import io.entangledword.port.in.blogpost.CreatePostUseCase;
 import io.entangledword.port.in.blogpost.FindBlogpostSpecificUseCase;
+import lombok.extern.log4j.Log4j2;
 import reactor.core.publisher.Mono;
 
+@Log4j2
 @Component
 public class BlogpostHandler extends ReactiveRestHandlerAdapter<BlogpostDTO> {
 
@@ -60,8 +62,11 @@ public class BlogpostHandler extends ReactiveRestHandlerAdapter<BlogpostDTO> {
 
 	@Override
 	public Mono<ServerResponse> getPostsByQueryParams(ServerRequest serverRequest) {
+		log.info("All query params in the request : " + serverRequest.queryParams().keySet() + " "
+				+ serverRequest.queryParams().values());
 		String tagsQuery = serverRequest.queryParam(URI_TAGS)
 				.orElseThrow(() -> new IllegalArgumentException("Query parameters cannot be empty."));
+		log.info("Query params received: " + tagsQuery);
 		return ok().contentType(TEXT_EVENT_STREAM).body(
 				findPostUC.getByTagsList(new HashSet<String>(Arrays.asList(tagsQuery.split(",")))), BlogpostDTO.class);
 	}

@@ -101,7 +101,7 @@ class BlogPostRouterTest {
 	void whenGetWithQueryParamTags_thenCallsCorrectHandler() {
 		FluxExchangeResult<BlogpostDTO> result = this.testClient.get()
 				.uri(uriBuillder -> uriBuillder.path(URI_SEARCH).queryParam("tags", "tag1,tag2").build())
-				.accept(APPLICATION_JSON).exchange().expectStatus().isOk().expectHeader()
+				.accept(TEXT_EVENT_STREAM).exchange().expectStatus().isOk().expectHeader()
 				.contentTypeCompatibleWith(TEXT_EVENT_STREAM).returnResult(BlogpostDTO.class);
 
 		StepVerifier.create(result.getResponseBody()).expectNextCount(4)

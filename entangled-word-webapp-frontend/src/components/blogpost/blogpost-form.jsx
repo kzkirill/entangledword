@@ -2,6 +2,7 @@ import { Redirect } from 'react-router-dom';
 import { loginHelper } from '../../global/authentication.js';
 import { create, getBlogpost, update } from '../../services/blogpost.js'
 import { clusterize } from '../../services/intellexer.js'
+import { nowAsString } from '../../utils/format_utils.js';
 const { Component } = require("react")
 
 const modeUnknown = 'unknown';
@@ -59,18 +60,6 @@ class PostForm extends Component {
         clusterize();//.then(response => console.log(response));
     }
 
-    leadingZeros(number){
-        return number <=9 ? "0" + number:number.toString();
-    }
-
-    nowAsString() {
-        const d = new Date();
-        const month = this.leadingZeros(d.getMonth() + 1);
-        const datestring = d.getFullYear() + " " + d.getDate() + "/" + month + " " +
-            this.leadingZeros(d.getHours()) + ":" + this.leadingZeros(d.getMinutes());
-        return datestring;
-    }
-
     handleSubmit(event) {
         const toSave = {
             id: this.state.id,
@@ -82,7 +71,7 @@ class PostForm extends Component {
         };
         const onResponse = () => this.props.refreshTags();
         if (this.state.mode === modeNew) {
-            toSave.created = this.nowAsString();
+            toSave.created = nowAsString();
             create(toSave)
                 .then(onResponse())
                 .catch(exc => console.log(exc));

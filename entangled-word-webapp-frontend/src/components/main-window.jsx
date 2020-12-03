@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { v4 as uuid } from 'uuid';
 import PostsList from "./blogpost/posts-list";
 import MainMenu from "./main-menu";
 import { Route, Redirect, Switch, BrowserRouter } from 'react-router-dom';
@@ -9,6 +10,7 @@ import { loginHelper } from "../global/authentication";
 import { getUser } from "../services/users";
 import { TagsList } from "./tag/tags-list";
 import { getTags } from "../services/tag";
+import { getByTags } from "../services/blogpost";
 
 class MainWindow extends Component {
 
@@ -56,7 +58,8 @@ class MainWindow extends Component {
                     <div className="tile is-10 is-parent">
                         <div className="tile is-child box">
                             <Switch>
-                                <Route exact path="/feed"><PostsList /></Route>
+                                <Route exact path="/feed/:search" render={(match) => <PostsList getPostsFunction={getByTags} match={match} key={uuid()} />}></Route>
+                                <Route exact path="/feed"><PostsList key='generalFeed'/></Route>
                                 <Route exact path="/new"><PostForm key={modeNew} refreshTags={this.refreshTags} /></Route>
                                 <Route exact path="/details/:ID" render={(match) => <PostForm match={match} key={modeUnknown} />}></Route>
                                 <Route exact path="/login"><UsersList loggedStateChanged={this.loggedStateChanged} /></Route>

@@ -4,9 +4,14 @@ import { rootUrl } from './props';
 import { getUser } from './users';
 
 const endPoint = '/blogpost/';
+const querySuffix = 'search';
 
 export default function getBlogpostAll(blogpostReceived) {
     getEventsSource(rootUrl + endPoint, blogpostReceived);
+}
+
+export function getByTags(onTagReceived, tagsSearch) {
+    getEventsSource(rootUrl + endPoint + querySuffix + tagsSearch , onTagReceived);
 }
 
 export function getBlogpost(ID) {

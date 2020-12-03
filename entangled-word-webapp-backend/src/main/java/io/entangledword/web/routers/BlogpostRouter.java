@@ -26,7 +26,7 @@ public class BlogpostRouter {
 	public RouterFunction<ServerResponse> blogpostRouterFunction(RESTHandler blogpostHandler) {
 		return route(POST(URI_BASE).and(accept(APPLICATION_JSON)), blogpostHandler::post)
 				.andRoute(GET(URI_BASE).and(accept(TEXT_EVENT_STREAM)), blogpostHandler::getStream)
-				.andRoute(GET(URI_BASE + URI_SEARCH).and(accept(APPLICATION_JSON)), blogpostHandler::getPostsByQueryParams)
+				.andRoute(GET(URI_BASE + URI_SEARCH).and(accept(TEXT_EVENT_STREAM)), blogpostHandler::getPostsByQueryParams)
 				.andRoute(GET(URI_BASE + "/{" + URI_ID + "}").and(accept(APPLICATION_JSON)), blogpostHandler::get)
 				.andRoute(PUT(URI_BASE + "/{" + URI_ID + "}").and(accept(APPLICATION_JSON)), blogpostHandler::put)
 				.andRoute(DELETE(URI_BASE + "/{" + URI_ID + "}"), blogpostHandler::delete);
