@@ -54,8 +54,8 @@ class TagsList extends Component {
                     className={"tag" + this.selectionClass(tag)}>
                     {tag}
                 </span>))}
-                {this.buildButton()}
             </div>
+            {this.buildButton()}
         </div>)
     }
 
