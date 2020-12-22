@@ -4,14 +4,17 @@ import { rootUrl } from './props';
 import { getUser } from './users';
 
 const endPoint = '/blogpost/';
-const querySuffix = 'search';
+const backendQuerySuffix = 'search';
+export const byQueryURL = "/feed/byquery";
+export const tagsParamName = 'tags';
+export const authorParamName = 'author';
 
 export default function getBlogpostAll(blogpostReceived) {
     getEventsSource(rootUrl + endPoint, blogpostReceived);
 }
 
-export function getByTags(onTagReceived, tagsSearch) {
-    getEventsSource(rootUrl + endPoint + querySuffix + tagsSearch , onTagReceived);
+export function getByQuerySearch(onResultReceived, searchWithQueryParams) {
+    getEventsSource(rootUrl + endPoint + backendQuerySuffix + searchWithQueryParams , onResultReceived);
 }
 
 export function getBlogpost(ID) {

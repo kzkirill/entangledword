@@ -10,7 +10,7 @@ import { loginHelper } from "../global/authentication";
 import { getUser } from "../services/users";
 import { TagsList } from "./tag/tags-list";
 import { getTags } from "../services/tag";
-import { getByTags } from "../services/blogpost";
+import { getByQuerySearch } from "../services/blogpost";
 
 class MainWindow extends Component {
 
@@ -63,7 +63,7 @@ class MainWindow extends Component {
                     <div className="tile is-10 is-parent">
                         <div className="tile is-child box">
                             <Switch>
-                                <Route exact path="/feed/:search" render={(match) => <PostsList getPostsFunction={getByTags} match={match} key={uuid()} />}></Route>
+                                <Route exact path="/feed/:search" render={(match) => <PostsList getPostsFunction={getByQuerySearch} match={match} key={uuid()} />}></Route>
                                 <Route exact path="/feed"><PostsList key='generalFeed' /></Route>
                                 <Route exact path="/new"><PostForm key={modeNew} refreshTags={this.refreshTags} /></Route>
                                 <Route exact path="/details/:ID" render={(match) => <PostForm match={match} key={modeUnknown} refreshTags={this.refreshTags} />}></Route>

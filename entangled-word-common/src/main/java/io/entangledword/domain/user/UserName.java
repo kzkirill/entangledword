@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonFormat
-class UserName {
+public class UserName {
 	private String title;
 	private String first;
 	private String last;

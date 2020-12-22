@@ -43,6 +43,11 @@ public class FindPostsService implements FindUseCase<BlogpostDTO>, FindBlogpostS
 	}
 
 	@Override
+	public Flux<BlogpostPreview> getByAuthorsList(Set<String> authorsIDs) {
+		return findPostsPort.getByAuthorsList(authorsIDs).flatMap(mapToUserData());
+	}
+
+	@Override
 	public Flux<BlogpostPreview> getAllPreviews() {
 		return this.findPort.getAll().flatMap(mapToUserData());
 	}

@@ -13,7 +13,7 @@ import io.entangledword.persist.entity.UserMongoDoc;
 import io.entangledword.port.out.DTOMappingService;
 
 @Configuration
-public class PersistenceConfiguration {
+public class DTOMappingConfiguration {
 
 	@Bean
 	public ModelMapper getMapper() {

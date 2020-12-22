@@ -95,23 +95,6 @@ class OutPortsAdaptersTest {
 			BlogpostDTO.newInstance(testId1, "save 01 title", "save 01 text", "save 01 author"));
 
 	@Test
-	void whenGetByTags_thenReturnsAllWithAtLeastTheseTags() {
-		Set<String> tagsValues = of("tag1", "tag2");
-		Set<String> tagsNoPosts = of("tagWithNoPosts");
-		BlogpostMongoDoc withTags1 = (BlogpostMongoDoc) initialize(
-				BlogpostMongoDoc.newInstance("tagsID1", "Tags title 1", "Tags title 1", "sdsdsa"));
-		withTags1.setTags(tagsValues);
-		BlogpostMongoDoc withTags2 = (BlogpostMongoDoc) initialize(
-				BlogpostMongoDoc.newInstance("tagsID2", "Tags title 2", "Tags title 2", "sdsdsa"));
-		withTags2.setTags(of("tag1", "tag2","tag3"));
-		when(repo.findByTagsContaining(tagsValues)).thenReturn(Flux.just(withTags1, withTags2));
-		when(repo.findByTagsContaining(tagsNoPosts)).thenReturn(Flux.empty());
-		
-		create(find.getByTagsList(tagsValues)).expectNextCount(2l).expectComplete().verify();
-		create(find.getByTagsList(tagsNoPosts)).expectNextCount(0l).expectComplete().verify();
-	}
-
-	@Test
 	void whenSaved_thenReturnsTheSavedBlogpost() {
 		when(repo.save(any(entityClass))).thenReturn(just(postMongoDOc));
 		create(create.save(postDTO)).expectNextMatches(this::matchPost).expectComplete().verify();

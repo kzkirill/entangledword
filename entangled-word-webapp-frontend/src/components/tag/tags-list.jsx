@@ -1,5 +1,7 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
+import { tagsParamName } from "../../services/blogpost";
+import { byQueryURL } from "../../services/blogpost";
 
 class TagsList extends Component {
 
@@ -36,8 +38,8 @@ class TagsList extends Component {
             return (
                 <Link className="button"
                     to={{
-                        pathname: "/feed/tags",
-                        search: "?tags=" + this.state.selected
+                        pathname: byQueryURL,
+                        search: "?" + tagsParamName + "=" + this.state.selected
                     }}
                 >Show Posts</Link>
             );

@@ -50,12 +50,9 @@ class BlogpostRepositoryTest {
 	void testGetStream() {
 		testee.deleteAll().block();
 		Set<BlogpostMongoDoc> all = Set.of(newInstance("For stream 1", "Text for stream", "Stream Author"), newPost);
-		Flux.fromIterable(all)
-				.flatMap(post -> testee.save(post)).blockLast();
-		create(testee.findAll())
-			.expectNextMatches(next -> all.contains(next))
-			.expectNextMatches(next -> all.contains(next))
-			.expectComplete().verify();
+		Flux.fromIterable(all).flatMap(post -> testee.save(post)).blockLast();
+		create(testee.findAll()).expectNextMatches(next -> all.contains(next))
+				.expectNextMatches(next -> all.contains(next)).expectComplete().verify();
 	}
 
 	@Test
@@ -75,16 +72,6 @@ class BlogpostRepositoryTest {
 		testee.save(withDifferentTags).block();
 		testee.save(withOneTag).block();
 		create(testee.findAll()).expectNextCount(3l).expectComplete().verify();
-		create(testee.findByTagsContaining(Set.of("tag2", "tag1")))
-			.expectNext(withTags)
-			.expectNext(withOneTag)
-			.expectComplete().verify();
-		create(testee.findByTagsContaining(Set.of("tag2")))
-			.expectNext(withTags)
-			.expectComplete().verify();
-		create(testee.findByTagsContaining(Set.of("tag1", "tag2", "tag5")))
-			.expectNextCount(2l)
-			.expectComplete().verify();
 	}
 
 	@Test

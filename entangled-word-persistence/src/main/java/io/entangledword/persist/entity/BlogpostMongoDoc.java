@@ -1,5 +1,6 @@
 package io.entangledword.persist.entity;
 
+
 import static java.time.LocalDateTime.now;
 import static java.time.LocalDateTime.of;
 

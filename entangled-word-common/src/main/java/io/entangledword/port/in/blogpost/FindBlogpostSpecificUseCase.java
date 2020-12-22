@@ -11,4 +11,6 @@ public interface FindBlogpostSpecificUseCase {
 
 	public Flux<BlogpostPreview> getByTagsList(Set<String> tagsValues);
 
+	public Flux<BlogpostPreview> getByAuthorsList(Set<String> authorsIDs);
+
 }

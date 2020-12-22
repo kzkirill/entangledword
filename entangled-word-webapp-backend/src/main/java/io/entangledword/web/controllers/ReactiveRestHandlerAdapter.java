@@ -8,11 +8,13 @@ import static org.springframework.web.reactive.function.server.ServerResponse.no
 import static org.springframework.web.reactive.function.server.ServerResponse.notFound;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
-import java.util.logging.Logger;
 
-import org.springframework.http.ReactiveHttpOutputMessage;
-import org.springframework.web.reactive.function.BodyInserter;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import org.springframework.web.reactive.function.server.ServerResponse.BodyBuilder;
@@ -21,13 +23,15 @@ import org.springframework.web.util.UriComponentsBuilder;
 import io.entangledword.port.in.DeleteByIDUseCase;
 import io.entangledword.port.in.FindUseCase;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@Log4j2
 @AllArgsConstructor
 public abstract class ReactiveRestHandlerAdapter<DTOType> implements RESTHandler {
 
 	public static final String URI_ID = "ID";
-	private static Logger log = Logger.getLogger(ReactiveRestHandlerAdapter.class.getName());
 	private Class<DTOType> dtoType;
 	private String uriBase;
 	protected DeleteByIDUseCase deleteUC;
@@ -98,6 +102,11 @@ public abstract class ReactiveRestHandlerAdapter<DTOType> implements RESTHandler
 	protected Mono<ServerResponse> logAndCreateNotFound(String ID) {
 		log.info("ID not found : " + ID);
 		return notFound().build();
+	}
+
+	protected Mono<ServerResponse> badRequestResponse(String message) {
+		log.error(message);
+		return ServerResponse.badRequest().body(BodyInserters.fromPublisher(Mono.just(message), String.class));
 	}
 
 }

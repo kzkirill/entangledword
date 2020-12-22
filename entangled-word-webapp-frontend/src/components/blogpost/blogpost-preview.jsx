@@ -1,3 +1,5 @@
+import { authorParamName, byQueryURL } from "../../services/blogpost";
+
 const { Component } = require("react");
 
 class BPostPreview extends Component {
@@ -9,6 +11,7 @@ class BPostPreview extends Component {
         const post = this.props.post;
         const lastUpdatedStr = post.updated;
         const postURL = `/details/${post.id}`;
+        const findByAuthorURl = byQueryURL + "?" + authorParamName + "=" + post.author;
         return (
             <div className="card">
                 <div className="card-content">
@@ -19,7 +22,7 @@ class BPostPreview extends Component {
                         </div>
                         <div className="media-content">
                             <p className="title is-4">{post.title}</p>
-                            <p className="subtitle is-6">{post.userFullname}</p>
+                            <a className="navbar-item subtitle is-6" href={findByAuthorURl}>{post.userFullname} </a>
                             <time dateTime={lastUpdatedStr}>{lastUpdatedStr}</time>
                         </div>
                     </div>
