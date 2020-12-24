@@ -15,14 +15,16 @@ import io.entangledword.port.in.user.CreateUserUseCase;
 import reactor.core.publisher.Mono;
 
 @Component
-public class UserHandler extends ReactiveRestHandlerAdapter<UserDTO>{
+public class UserHandler extends ReactiveRestHandlerAdapter<UserDTO> {
 
 	public static final String URI_BASE = "/user";
+	public static final String USER_ID = "USER_ID";
+
 	@Autowired
 	private CreateUserUseCase createUC;
 
 	public UserHandler(DeleteByIDUseCase deleteUC, FindUseCase<UserDTO> findUserService) {
-		super(UserDTO.class, URI_BASE, deleteUC, findUserService);
+		super(UserDTO.class, URI_BASE, deleteUC, findUserService, USER_ID);
 	}
 
 	@Override

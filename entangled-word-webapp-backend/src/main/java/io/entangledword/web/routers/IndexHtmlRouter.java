@@ -1,6 +1,5 @@
 package io.entangledword.web.routers;
 
-import static io.entangledword.web.controllers.ReactiveRestHandlerAdapter.URI_ID;
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
@@ -22,7 +21,7 @@ public class IndexHtmlRouter {
 		return route(GET("/"), request -> getIndexResponse(html))
 				.andRoute(GET("/feed"), request -> getIndexResponse(html))
 				.andRoute(GET("/newpost"), request -> getIndexResponse(html))
-				.andRoute(GET("/details"+ "/{" + URI_ID + "}"), request -> getIndexResponse(html))
+				.andRoute(GET("/details" + "/{ID}"), request -> getIndexResponse(html))
 				.andRoute(GET("/login"), request -> getIndexResponse(html));
 	}
 

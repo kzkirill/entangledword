@@ -8,10 +8,6 @@ import static org.springframework.web.reactive.function.server.ServerResponse.no
 import static org.springframework.web.reactive.function.server.ServerResponse.notFound;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
 import java.util.function.Function;
 
 import org.springframework.web.reactive.function.BodyInserters;
@@ -24,21 +20,19 @@ import io.entangledword.port.in.DeleteByIDUseCase;
 import io.entangledword.port.in.FindUseCase;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Log4j2
 @AllArgsConstructor
 public abstract class ReactiveRestHandlerAdapter<DTOType> implements RESTHandler {
-
-	public static final String URI_ID = "ID";
 	private Class<DTOType> dtoType;
 	private String uriBase;
 	protected DeleteByIDUseCase deleteUC;
 	protected FindUseCase<DTOType> findUseCase;
+	private String uri_id;
 
 	public Mono<ServerResponse> get(ServerRequest serverRequest) {
-		Mono<DTOType> found = findUseCase.getByID(serverRequest.pathVariable(URI_ID)).map(foundObject -> {
+		Mono<DTOType> found = findUseCase.getByID(serverRequest.pathVariable(uri_id)).map(foundObject -> {
 			log.info(format("DTO object found: %s", foundObject));
 			return foundObject;
 		});
@@ -65,7 +59,7 @@ public abstract class ReactiveRestHandlerAdapter<DTOType> implements RESTHandler
 	}
 
 	protected Mono<ServerResponse> put(ServerRequest serverRequest, Function<DTOType, Mono<DTOType>> save) {
-		String ID = serverRequest.pathVariable(URI_ID);
+		String ID = serverRequest.pathVariable(uri_id);
 		log.info("PUT: ID to update : " + ID);
 		return this.findUseCase.getByID(ID)
 				.flatMap(found -> getObject(serverRequest))
@@ -81,7 +75,7 @@ public abstract class ReactiveRestHandlerAdapter<DTOType> implements RESTHandler
 
 	protected Mono<ServerResponse> delete(ServerRequest serverRequest, Function<String, Mono<DTOType>> getByID,
 			Function<String, Mono<Void>> deletOne) {
-		String ID = serverRequest.pathVariable(URI_ID);
+		String ID = serverRequest.pathVariable(uri_id);
 		log.info("DELETE: ID to delete : " + ID);
 		return getByID.apply(ID).flatMap(p -> deletOne.apply(ID)).flatMap(p -> noContent().build())
 				.switchIfEmpty(logAndCreateNotFound(ID));

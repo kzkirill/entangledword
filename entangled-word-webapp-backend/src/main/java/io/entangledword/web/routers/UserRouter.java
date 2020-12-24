@@ -1,7 +1,7 @@
 package io.entangledword.web.routers;
 
+import static io.entangledword.web.controllers.UserHandler.USER_ID;
 import static io.entangledword.web.controllers.UserHandler.URI_BASE;
-import static io.entangledword.web.controllers.ReactiveRestHandlerAdapter.URI_ID;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.TEXT_EVENT_STREAM;
 import static org.springframework.web.reactive.function.server.RequestPredicates.DELETE;
@@ -25,10 +25,9 @@ public class UserRouter {
 	public RouterFunction<ServerResponse> userRouterFunction(RESTHandler userHandler) {
 		return route(POST(URI_BASE).and(accept(APPLICATION_JSON)), userHandler::post)
 				.andRoute(GET(URI_BASE).and(accept(TEXT_EVENT_STREAM)), userHandler::getStream)
-				.andRoute(GET(URI_BASE + "/{" + URI_ID + "}").and(accept(APPLICATION_JSON)), userHandler::get)
-				.andRoute(PUT(URI_BASE + "/{" + URI_ID + "}").and(accept(APPLICATION_JSON)), userHandler::put)
-				.andRoute(DELETE(URI_BASE + "/{" + URI_ID + "}"), userHandler::delete);
+				.andRoute(GET(URI_BASE + "/{" + USER_ID + "}").and(accept(APPLICATION_JSON)), userHandler::get)
+				.andRoute(PUT(URI_BASE + "/{" + USER_ID + "}").and(accept(APPLICATION_JSON)), userHandler::put)
+				.andRoute(DELETE(URI_BASE + "/{" + USER_ID + "}"), userHandler::delete);
 	}
-
 
 }

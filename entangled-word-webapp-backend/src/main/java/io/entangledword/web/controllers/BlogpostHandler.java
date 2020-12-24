@@ -5,7 +5,6 @@ import static java.util.Arrays.stream;
 import static org.springframework.http.MediaType.TEXT_EVENT_STREAM;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -30,9 +29,10 @@ import reactor.core.publisher.Mono;
 @Component
 public class BlogpostHandler extends ReactiveRestHandlerAdapter<BlogpostDTO> {
 
-	public static final String URI_TAGS = "tags";
-	public static final String URI_AUTHOR = "author";
+	private static final String QUERY_PARAM_TAGS = "tags";
+	private static final String QUERY_PARAM_AUTHOR = "author";
 	public static final String URI_BASE = "/blogpost";
+	public static final String BLOGPOST_ID = "BLOGPOST_ID";
 	public static final String URI_SEARCH = "/search";
 	@Autowired
 	private CreatePostUseCase createUC;
@@ -40,7 +40,7 @@ public class BlogpostHandler extends ReactiveRestHandlerAdapter<BlogpostDTO> {
 
 	public BlogpostHandler(CreatePostUseCase createUC, DeleteByIDUseCase deleteUC, FindUseCase<BlogpostDTO> findPostsUC,
 			FindBlogpostSpecificUseCase findPostPreviewUC) {
-		super(BlogpostDTO.class, URI_BASE, deleteUC, findPostsUC);
+		super(BlogpostDTO.class, URI_BASE, deleteUC, findPostsUC, BLOGPOST_ID);
 		this.createUC = createUC;
 		this.findPostUC = findPostPreviewUC;
 	}
@@ -94,10 +94,10 @@ public class BlogpostHandler extends ReactiveRestHandlerAdapter<BlogpostDTO> {
 	}
 
 	protected Optional<Function<HashSet<String>, Flux<BlogpostPreview>>> getMethod(String queryKey) {
-		if (URI_TAGS.equals(queryKey)) {
+		if (QUERY_PARAM_TAGS.equals(queryKey)) {
 			return Optional.of((parameter) -> findPostUC.getByTagsList(parameter));
 		}
-		if (URI_AUTHOR.equals(queryKey)) {
+		if (QUERY_PARAM_AUTHOR.equals(queryKey)) {
 			return Optional.of((parameter) -> findPostUC.getByAuthorsList(parameter));
 		}
 		return Optional.empty();

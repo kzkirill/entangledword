@@ -13,9 +13,10 @@ import reactor.core.publisher.Mono;
 public class TagHandler extends ReactiveRestHandlerAdapter<Tag> {
 
 	public static final String URI_BASE = "/tag";
+	public static final String TAG_ID = "TAG_ID";
 
 	public TagHandler(FindUseCase<Tag> findUseCase) {
-		super(Tag.class, URI_BASE, null, findUseCase);
+		super(Tag.class, URI_BASE, null, findUseCase, TAG_ID);
 	}
 
 	@Override

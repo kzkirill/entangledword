@@ -2,7 +2,7 @@ package io.entangledword.web.controllers;
 
 import static io.entangledword.domain.post.BlogpostDTO.newInstance;
 import static io.entangledword.web.controllers.BlogpostHandler.URI_BASE;
-import static io.entangledword.web.controllers.BlogpostHandler.URI_ID;
+import static io.entangledword.web.controllers.BlogpostHandler.BLOGPOST_ID;
 import static io.entangledword.web.controllers.BlogpostHandler.URI_SEARCH;
 import static java.lang.String.format;
 import static java.time.Duration.ofMillis;
@@ -140,7 +140,7 @@ class BlogPostRouterTest {
 
 		@Override
 		public Mono<ServerResponse> get(ServerRequest serverRequest) {
-			final String requestID = serverRequest.pathVariable(URI_ID);
+			final String requestID = serverRequest.pathVariable(BLOGPOST_ID);
 			return just(getRegustTestee).filter(testee -> testee.getID().equals(requestID))
 					.flatMap(found -> okWithJason().body(fromPublisher(just(found), BlogpostDTO.class)))
 					.switchIfEmpty(notFound().build());
