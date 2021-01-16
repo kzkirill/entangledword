@@ -1,7 +1,6 @@
 package io.entangledword.services;
 
 import static java.time.LocalDateTime.now;
-import static java.util.Set.of;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -11,7 +10,6 @@ import static reactor.test.StepVerifier.create;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -35,7 +33,6 @@ import io.entangledword.port.out.blogpost.DeletePostAdapter;
 import io.entangledword.port.out.blogpost.FindPort;
 import io.entangledword.port.out.blogpost.FindPostsAdapter;
 import io.entangledword.port.out.tag.TagPortAdapter;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @SpringBootTest
