@@ -1,0 +1,1 @@
+web: java -jar /entangled-word-webapp-backend/target/entangled-word.jar 
